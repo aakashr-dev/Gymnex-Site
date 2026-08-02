@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  --color-crimson-50: #fff1f3;
+  --color-crimson-100: #ffe4e8;
+  --color-crimson-200: #fecdd6;
+  --color-crimson-300: #fda4af;
+  --color-crimson-400: #fb7185;
+  --color-crimson-500: #DC143C;
+  --color-crimson-600: #FF1E42;
+  --color-crimson-700: #be123c;
+  --color-crimson-800: #9f1239;
+  --color-crimson-900: #881337;
+  --color-crimson-950: #4c0519;
+
+  --color-dark-base: #050505;
+  --color-dark-surface: #09090b;
+  --color-dark-card: #121218;
+  --color-dark-cardHover: #181824;
+  --color-dark-muted: #27273a;
+  --color-dark-subtle: #1f1f2e;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Oswald', 'Outfit', sans-serif;
+
+  --shadow-crimson-glow: 0 0 25px -5px rgba(220, 20, 60, 0.4);
+  --shadow-crimson-sm: 0 0 12px -2px rgba(255, 30, 66, 0.3);
+  --shadow-dark-elevation: 0 10px 30px -10px rgba(0, 0, 0, 0.8);
+}
+
+@layer base {
+  body {
+    background-color: #050505;
+    color: #f3f4f6;
+    font-family: var(--font-sans);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #1f1f2e;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #DC143C;
+}
+
+/* Glass & Texture Helpers */
+.glass-panel {
+  background: rgba(18, 18, 24, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-crimson {
+  background: rgba(18, 18, 24, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(220, 20, 60, 0.25);
+  box-shadow: 0 0 20px -5px rgba(220, 20, 60, 0.15);
+}
+
+.text-gradient-crimson {
+  background: linear-gradient(135deg, #ffffff 0%, #DC143C 60%, #FF1E42 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.editorial-header {
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.bg-crimson-radial {
+  background-image: radial-gradient(circle at center, rgba(220, 20, 60, 0.18) 0%, transparent 70%);
+}
+
+@keyframes atmosphericGlow {
+  0% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.1); }
+  100% { opacity: 0.3; transform: scale(1); }
+}
+
+.animate-glow {
+  animation: atmosphericGlow 8s ease-in-out infinite;
+}
