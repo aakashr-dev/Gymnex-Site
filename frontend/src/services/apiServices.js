@@ -78,8 +78,13 @@ export const memberService = {
 
 export const trainerService = {
   getTrainers: async () => {
-    await delay(150);
-    return MOCK_TRAINERS;
+    try {
+      const liveTrainers = await api.getTrainers();
+      if (Array.isArray(liveTrainers) && liveTrainers.length > 0) return liveTrainers;
+      return [];
+    } catch (e) {
+      return [];
+    }
   }
 };
 

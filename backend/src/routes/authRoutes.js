@@ -11,7 +11,7 @@ import {
   resetPassword,
   verifyEmail
 } from '../controllers/authController.js';
-import { verifyToken } from '../middlewares/authMiddleware.js';
+import { verifyToken } from '../middleware/authMiddleware.js';
 import {
   registerValidation,
   loginValidation,

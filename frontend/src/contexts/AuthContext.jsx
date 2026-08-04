@@ -35,10 +35,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('gymnex_user');
-    toast.success('Logged out successfully.');
+  const logout = async () => {
+    try {
+      await api.logout();
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      setUser(null);
+      setRole(null);
+      localStorage.removeItem('gymnex_user');
+      localStorage.removeItem('gymnex_jwt_token');
+      toast.success('Logged out successfully.');
+      window.location.href = '/login/admin';
+    }
   };
 
   const switchRole = (newRole) => {

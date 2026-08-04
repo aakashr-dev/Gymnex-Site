@@ -87,10 +87,10 @@ export const createMember = async (req, res) => {
       branch: branch || null,
       membership: membership || null,
       fitnessGoal: fitnessGoal || 'General Fitness',
-      currentWeight: Number(currentWeight) || 75,
+      weight: Number(currentWeight || req.body.weight) || 75,
       targetWeight: Number(targetWeight) || 70,
       preferredTrainingStyle: preferredTrainingStyle || 'General Fitness',
-      medicalInformation: medicalInformation || 'None',
+      medicalNotes: medicalInformation || req.body.medicalNotes || 'None',
       assignmentStatus: 'Pending Assignment',
       status: 'Active',
       registrationDate: new Date()

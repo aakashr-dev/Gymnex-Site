@@ -45,6 +45,7 @@ export const AdminMembers = () => {
     email: '',
     phone: '',
     membership: '',
+    trainerId: '',
     fitnessGoal: 'Weight Loss',
     currentWeight: 75,
     targetWeight: 70,
@@ -148,21 +149,27 @@ export const AdminMembers = () => {
     setSubmitting(true);
     try {
       const res = await api.createMember(newMember);
-      if (res.success || res.data) {
-        setIsAddModalOpen(false);
-        setNewMember({
-          name: '',
-          email: '',
-          phone: '',
-          membership: memberships.length > 0 ? (memberships[0]._id || memberships[0].id) : '',
-          fitnessGoal: 'Weight Loss',
-          currentWeight: 75,
-          targetWeight: 70,
-          preferredTrainingStyle: 'HIIT & Cardio',
-          medicalInformation: 'None'
-        });
-        loadData();
+      const createdMember = res.data || res;
+      const memberId = createdMember._id || createdMember.id;
+
+      if (newMember.trainerId && memberId) {
+        await api.assignTrainer(memberId, newMember.trainerId);
       }
+
+      setIsAddModalOpen(false);
+      setNewMember({
+        name: '',
+        email: '',
+        phone: '',
+        membership: memberships.length > 0 ? (memberships[0]._id || memberships[0].id) : '',
+        trainerId: '',
+        fitnessGoal: 'Weight Loss',
+        currentWeight: 75,
+        targetWeight: 70,
+        preferredTrainingStyle: 'HIIT & Cardio',
+        medicalInformation: 'None'
+      });
+      loadData();
     } catch (err) {
       console.error('Create member error:', err);
     } finally {
@@ -460,6 +467,22 @@ export const AdminMembers = () => {
                       ))}
                     </select>
                   </div>
+                </div>
+
+                <div>
+                  <label className="font-bold text-amber-400 uppercase block mb-1">Assign Personal Trainer</label>
+                  <select
+                    value={newMember.trainerId || ''}
+                    onChange={(e) => setNewMember({ ...newMember, trainerId: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-dark-surface border border-amber-500/40 rounded-xl text-amber-400 font-bold focus:outline-none focus:border-amber-500"
+                  >
+                    <option value="">-- Assign Later (Pending Trainer Assignment Queue) --</option>
+                    {trainers.map((t) => (
+                      <option key={t._id || t.id} value={t._id || t.id}>
+                        {t.name} ({t.specialization || 'Master Coach'}) - {t.availabilityStatus || 'Available'}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/5 p-3.5 rounded-xl border border-white/5">

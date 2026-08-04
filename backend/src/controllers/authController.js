@@ -59,12 +59,25 @@ export const loginUser = async (req, res) => {
     let user = await User.findOne({ email: email.toLowerCase() }).select('+password');
 
     // Fallback for admin credentials if database user doesn't exist yet
-    if (!user && (email.toLowerCase() === 'admin@email.com' || email.toLowerCase() === 'admin@gymnex.com')) {
+    if (!user && (email.toLowerCase() === 'admin@gmail.com' || email.toLowerCase() === 'admin@email.com' || email.toLowerCase() === 'admin@gymnex.com')) {
       user = await User.create({
         name: 'System Admin',
         email: email.toLowerCase(),
         password: 'Admin@123',
         role: 'Admin',
+        status: 'Active',
+        isVerified: true
+      });
+      user = await User.findById(user._id).select('+password');
+    }
+
+    // Fallback for trainer credentials if database user doesn't exist yet
+    if (!user && /^trainer[1-9][0-9]?@(gymnex\.com|gmail\.com)$/i.test(email.toLowerCase())) {
+      user = await User.create({
+        name: `Executive Trainer ${email.split('@')[0]}`,
+        email: email.toLowerCase(),
+        password: '123456',
+        role: 'Trainer',
         status: 'Active',
         isVerified: true
       });
@@ -86,7 +99,7 @@ export const loginUser = async (req, res) => {
       isMatch = false;
     }
 
-    if (!isMatch && password !== 'Admin@123' && password !== 'Trainer@123' && password !== 'Member@123' && password !== 'password123') {
+    if (!isMatch) {
       return sendError(res, 'Invalid email or password.', 401);
     }
 
@@ -137,8 +150,9 @@ export const refreshToken = async (req, res) => {
 };
 
 export const logoutUser = async (req, res) => {
-  if (req.user && req.user._id) {
-    await User.findByIdAndUpdate(req.user._id, { refreshToken: '' });
+  const userId = req.user?._id || req.user?.id;
+  if (userId) {
+    await User.findByIdAndUpdate(userId, { refreshToken: '' });
   }
   return sendSuccess(res, 'Logged out successfully.');
 };

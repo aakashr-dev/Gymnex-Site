@@ -23,12 +23,12 @@ export const MemberAttendance = () => {
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
               <span className="font-semibold text-white">GYMNEX Manhattan Flagship — Main Arena</span>
               <span className="text-gray-400">Today @ 08:42 AM</span>
-              <Badge variant="green font-mono">ID: QR-99210</Badge>
+              <Badge variant="green" className="font-mono">ID: QR-99210</Badge>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
               <span className="font-semibold text-white">GYMNEX Manhattan Flagship — Main Arena</span>
               <span className="text-gray-400">Yesterday @ 07:15 AM</span>
-              <Badge variant="green font-mono">ID: QR-99210</Badge>
+              <Badge variant="green" className="font-mono">ID: QR-99210</Badge>
             </div>
           </div>
         </Card>

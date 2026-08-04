@@ -27,6 +27,7 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import equipmentRoutes from './routes/equipmentRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import corporateRoutes from './routes/corporateRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/equipment', equipmentRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/corporate-wellness', corporateRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Server Health Check Endpoint
 app.get('/api/health', (req, res) => {
@@ -86,23 +88,21 @@ const startServer = async () => {
     await seedDatabase();
   }
 
-  const listenWithFallback = (portToTry) => {
-    const server = app.listen(portToTry, () => {
-      console.log(`⚡ [GYMNEX BACKEND] Enterprise REST API Server running on port ${portToTry}`);
-      console.log(`🌐 Health check endpoint: http://localhost:${portToTry}/api/health`);
-    });
+  const server = app.listen(PORT, () => {
+    console.log(`⚡ [GYMNEX BACKEND] Enterprise REST API Server running on port ${PORT}`);
+    console.log(`🌐 Health check endpoint: http://localhost:${PORT}/api/health`);
+  });
 
-    server.on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        console.warn(`⚠️ Port ${portToTry} is in use. Automatically trying port ${portToTry + 1}...`);
-        listenWithFallback(portToTry + 1);
-      } else {
-        console.error('Server Listen Error:', err);
-      }
-    });
-  };
-
-  listenWithFallback(Number(PORT));
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`🚨 FATAL PORT CONFLICT: Port ${PORT} is already in use by another process.`);
+      console.error(`Please terminate the conflicting process or change PORT in backend/.env.`);
+      process.exit(1);
+    } else {
+      console.error('Server Listen Error:', err);
+      process.exit(1);
+    }
+  });
 };
 
 startServer();

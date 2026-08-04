@@ -7,14 +7,18 @@ import { Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const TrainersPage = () => {
-  const [trainers, setTrainers] = useState(MOCK_TRAINERS);
+  const [trainers, setTrainers] = useState([]);
   const [selectedTrainer, setSelectedTrainer] = useState(null);
 
   useEffect(() => {
     const fetchLiveTrainers = async () => {
-      const data = await api.getTrainers();
-      if (data && data.length > 0) {
-        setTrainers(data);
+      try {
+        const data = await api.getTrainers();
+        if (Array.isArray(data) && data.length > 0) {
+          setTrainers(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch live trainers:', err);
       }
     };
     fetchLiveTrainers();

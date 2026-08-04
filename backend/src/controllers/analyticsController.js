@@ -24,12 +24,12 @@ export const getAnalyticsOverview = async (req, res) => {
     const equipmentHealth = equipmentCount > 0 ? `${Math.round((operationalEquipment / equipmentCount) * 100)}%` : '98%';
 
     return sendSuccess(res, 'Dashboard overview telemetry fetched successfully.', {
-      totalMembers: totalMembers || 100,
-      totalTrainers: totalTrainers || 25,
-      totalBranches: totalBranches || 10,
-      todayCheckIns: todayCheckIns || 42,
+      totalMembers,
+      totalTrainers,
+      totalBranches,
+      todayCheckIns,
       monthlyRevenue,
-      activeMemberships: activeMemberships || 10,
+      activeMemberships,
       equipmentHealth,
       chartData: [
         { month: 'Jan', revenue: 98000, members: 840, attendance: 3200 },

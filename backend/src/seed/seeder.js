@@ -89,6 +89,14 @@ const seedData = async () => {
 
     // 3. Seed Admin Users
     await User.create({
+      name: 'System Admin (Gmail)',
+      email: 'admin@gmail.com',
+      password: 'Admin@123',
+      role: 'Admin',
+      status: 'Active',
+      isVerified: true
+    });
+    await User.create({
       name: 'Master Enterprise Admin',
       email: 'admin@gymnex.com',
       password: 'Admin@123',
@@ -104,34 +112,38 @@ const seedData = async () => {
       status: 'Active',
       isVerified: true
     });
-    console.log('✅ Seeded Admin Accounts (admin@gymnex.com / Admin@123).');
+    console.log('✅ Seeded Admin Accounts (admin@gmail.com & admin@gymnex.com / Admin@123).');
 
-    // Seed 3 Trainer Accounts
-    const trainerAccountEmails = ['trainer1@gymnex.com', 'trainer2@gymnex.com', 'trainer3@gymnex.com'];
+    // Seed 10 Trainer Accounts with password '123456'
+    const trainerAccountEmails = Array.from({ length: 10 }).flatMap((_, i) => [
+      `trainer${i + 1}@gymnex.com`,
+      `trainer${i + 1}@gmail.com`
+    ]);
     const trainerUserDocs = [];
     for (let t = 0; t < trainerAccountEmails.length; t++) {
       const u = await User.create({
-        name: `Executive Trainer ${t + 1}`,
+        name: `Executive Trainer ${Math.floor(t / 2) + 1}`,
         email: trainerAccountEmails[t],
-        password: 'Trainer@123',
+        password: '123456',
         role: 'Trainer',
         status: 'Active',
         isVerified: true
       });
       trainerUserDocs.push(u);
     }
-    console.log('✅ Seeded 3 Trainer Accounts (trainer1-3@gymnex.com / Trainer@123).');
+    console.log('✅ Seeded 10 Trainer Accounts (trainer1-10@gymnex.com & trainer1-10@gmail.com / password: 123456).');
 
     // 4. Seed 25 Master Trainers
     const trainersData = Array.from({ length: 25 }).map((_, i) => {
       const spec = SPECIALIZATIONS[i % SPECIALIZATIONS.length];
       const availabilityStatus = i % 8 === 0 ? 'On Leave' : i % 3 === 0 ? 'Busy' : 'Available';
+      const userDoc = i < 10 ? trainerUserDocs[i * 2] : null;
       return {
         trainerId: `TRN-${100 + i}`,
-        user: i < 3 ? trainerUserDocs[i]._id : null,
+        user: userDoc ? userDoc._id : null,
         branch: createdBranches[i % createdBranches.length]._id,
         name: i === 0 ? 'Marcus Vance' : i === 1 ? 'Sarah Jenkins' : i === 2 ? 'Dmitri Volkov' : `Coach Trainer ${i + 1}`,
-        email: i < 3 ? trainerAccountEmails[i] : `coach${i + 1}@gymnex.com`,
+        email: i < 10 ? `trainer${i + 1}@gymnex.com` : `coach${i + 1}@gymnex.com`,
         phone: `+1 (555) 019-${100 + i}`,
         role: 'Master Coach',
         experience: `${5 + (i % 8)} Years`,
@@ -177,11 +189,10 @@ const seedData = async () => {
         personalTrainer: assignedTrainerDoc,
         assignedTrainer: assignedTrainerDoc,
         assignmentStatus: isUnassigned ? 'Pending Assignment' : 'Assigned',
-        fitnessGoal,
-        currentWeight: 75 + (i % 25),
+        weight: 70 + (i % 25),
         targetWeight: 68 + (i % 20),
         preferredTrainingStyle: preferredStyle,
-        medicalInformation: i % 7 === 0 ? 'Mild lower back sensitivity' : 'None reported',
+        medicalNotes: i % 7 === 0 ? 'Mild lower back sensitivity' : 'None reported',
         attendance: 12 + (i % 40),
         height: 165 + (i % 25),
         weight: 60 + (i % 35),

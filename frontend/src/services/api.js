@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('gymnex_jwt_token');
@@ -25,6 +25,20 @@ export const api = {
     } catch (err) {
       console.warn('API Login fallback:', err.message);
       throw err;
+    }
+  },
+
+  async logout() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: 'POST',
+        headers: getAuthHeaders()
+      });
+      localStorage.removeItem('gymnex_jwt_token');
+      return await res.json();
+    } catch (err) {
+      localStorage.removeItem('gymnex_jwt_token');
+      return { success: true };
     }
   },
 
@@ -515,6 +529,34 @@ export const api = {
       return [];
     } catch (err) {
       return [];
+    }
+  },
+
+  // Notifications API
+  async getNotifications() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/notifications`, {
+        headers: getAuthHeaders()
+      });
+      const data = await res.json();
+      if (data.success && Array.isArray(data.data)) return data.data;
+      return [];
+    } catch (err) {
+      console.error('Fetch notifications API failed:', err.message);
+      return [];
+    }
+  },
+
+  async markNotificationRead(id) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
+        method: 'PATCH',
+        headers: getAuthHeaders()
+      });
+      return await res.json();
+    } catch (err) {
+      console.error('Mark notification read API failed:', err.message);
+      return { success: false, message: err.message };
     }
   },
 

@@ -12,7 +12,7 @@ export const HomePage = () => {
   const navigate = useNavigate();
   const [is360ModalOpen, setIs360ModalOpen] = useState(false);
   const [introDone, setIntroDone] = useState(() => !!window.__introDone);
-  const [trainers, setTrainers] = useState(MOCK_TRAINERS);
+  const [trainers, setTrainers] = useState([]);
 
   useEffect(() => {
     if (window.__introDone) {
@@ -24,8 +24,12 @@ export const HomePage = () => {
     window.addEventListener('introComplete', handleIntroComplete);
 
     const fetchLiveTrainers = async () => {
-      const data = await api.getTrainers();
-      if (data && data.length > 0) setTrainers(data.slice(0, 3));
+      try {
+        const data = await api.getTrainers();
+        if (Array.isArray(data) && data.length > 0) setTrainers(data.slice(0, 3));
+      } catch (err) {
+        console.error('Failed to load live trainers for home page:', err);
+      }
     };
     fetchLiveTrainers();
 
