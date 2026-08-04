@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export const PageTransition = ({ children }) => {
   return (
@@ -41,7 +41,8 @@ export const StaggerContainer = ({ children, className = '', staggerDelay = 0.08
     <motion.div
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: '-60px' }}
+      animate="show"
+      viewport={{ once: true }}
       variants={{
         hidden: {},
         show: {
@@ -122,3 +123,46 @@ export const MagneticButton = ({ children, className = '', onClick, ...props }) 
     </motion.button>
   );
 };
+
+/* ImageReveal Component for Premium Scroll-Wipe Reveal */
+export const ImageReveal = ({ src, alt, className = '', aspectRatio = 'aspect-video' }) => {
+  return (
+    <div className={`relative overflow-hidden rounded-2xl ${aspectRatio} ${className}`}>
+      <motion.div
+        initial={{ scale: 1.15, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full h-full"
+      >
+        <img src={src} alt={alt} className="w-full h-full object-cover" />
+      </motion.div>
+    </div>
+  );
+};
+
+/* AnimationSection Component for Scroll Reveal Section Animations */
+export const AnimationSection = ({ children, delay = 0, direction = 'up', className = '', id = '', ...props }) => {
+  const directions = {
+    up: { y: 35, x: 0 },
+    down: { y: -35, x: 0 },
+    left: { x: 35, y: 0 },
+    right: { x: -35, y: 0 },
+    none: { x: 0, y: 0 }
+  };
+
+  return (
+    <motion.div
+      id={id}
+      initial={{ opacity: 0, ...directions[direction] }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  );
+};
+

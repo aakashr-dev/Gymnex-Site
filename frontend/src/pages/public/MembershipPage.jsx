@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PageTransition, FadeIn, StaggerContainer, StaggerItem } from '../../components/motion/MotionComponents';
-import { SectionHeader, Button, Card, Badge } from '../../components/ui/UIComponents';
+import { SectionHeader, Button, Card, Badge, AtmosphericBackground } from '../../components/ui/UIComponents';
 import { MOCK_MEMBERSHIPS } from '../../data/mockData';
+import { api } from '../../services/api';
 import { Check, Zap, Sparkles, HelpCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export const MembershipPage = () => {
+  const [memberships, setMemberships] = useState(MOCK_MEMBERSHIPS);
   const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'annual'
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchLiveMemberships = async () => {
+      const data = await api.getMemberships();
+      if (data && data.length > 0) {
+        setMemberships(data);
+      }
+    };
+    fetchLiveMemberships();
+  }, []);
+
+  const handleSubscribe = (plan) => {
+    toast.success(`Selected ${plan.name}! Proceeding to enrollment...`);
+    navigate('/auth');
+  };
+
   return (
     <PageTransition>
-      <div className="pt-28 pb-24 bg-dark-base min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="pt-28 pb-24 bg-dark-base min-h-screen relative overflow-hidden">
+        <AtmosphericBackground />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
           <SectionHeader
             eyebrow="Access Tiers"
             title="SELECT YOUR ATHLETIC TIER"
@@ -26,7 +46,7 @@ export const MembershipPage = () => {
               <button
                 onClick={() => setBillingCycle('monthly')}
                 className={`px-5 py-2 rounded-full text-xs font-bold uppercase transition-all ${
-                  billingCycle === 'monthly' ? 'bg-crimson-500 text-white shadow-crimson-sm' : 'text-gray-400 hover:text-white'
+                  billingCycle === 'monthly' ? 'bg-amber-500 text-black font-extrabold shadow-crimson-sm' : 'text-gray-400 hover:text-white'
                 }`}
               >
                 Monthly Billing
@@ -34,7 +54,7 @@ export const MembershipPage = () => {
               <button
                 onClick={() => setBillingCycle('annual')}
                 className={`px-5 py-2 rounded-full text-xs font-bold uppercase transition-all flex items-center gap-1.5 ${
-                  billingCycle === 'annual' ? 'bg-crimson-500 text-white shadow-crimson-sm' : 'text-gray-400 hover:text-white'
+                  billingCycle === 'annual' ? 'bg-amber-500 text-black font-extrabold shadow-crimson-sm' : 'text-gray-400 hover:text-white'
                 }`}
               >
                 <span>Annual Billing</span>
@@ -49,24 +69,29 @@ export const MembershipPage = () => {
               const priceVal = billingCycle === 'annual'
                 ? `$${Math.round(parseInt(plan.price.replace('$', '')) * 0.8)}`
                 : plan.price;
+              const isElite = plan.popular || plan.id === 'plan-crimson' || plan.name.includes('CRIMSON');
 
               return (
                 <StaggerItem key={plan.id}>
                   <Card
-                    className={`h-full flex flex-col justify-between relative ${
-                      plan.popular ? 'border-crimson-500 shadow-crimson-glow bg-dark-card/90' : ''
+                    className={`h-full flex flex-col justify-between relative transition-all duration-300 ${
+                      isElite
+                        ? 'border-amber-500 shadow-crimson-glow bg-dark-card/90 hover:scale-[1.03] hover:border-amber-400'
+                        : 'hover:scale-[1.01]'
                     }`}
                   >
-                    {plan.popular && (
-                      <div className="absolute top-0 right-8 -translate-y-1/2">
-                        <Badge variant="crimson" className="py-1 px-3">
+                    {isElite && (
+                      <div className="absolute top-5 right-6 z-10">
+                        <Badge variant="amber" className="py-1.5 px-3.5 text-[10px] sm:text-xs font-black tracking-wider uppercase shadow-crimson-sm">
                           {plan.badge}
                         </Badge>
                       </div>
                     )}
                     <div className="space-y-6">
                       <div>
-                        <h3 className="text-xl font-extrabold text-white font-display uppercase">{plan.name}</h3>
+                        <h3 className="text-xl font-extrabold text-white font-display uppercase flex items-center gap-2">
+                          {plan.name}
+                        </h3>
                         <div className="mt-3 flex items-baseline gap-1">
                           <span className="text-4xl sm:text-5xl font-black text-white font-display">{priceVal}</span>
                           <span className="text-xs text-gray-400 uppercase font-semibold">{plan.period}</span>
@@ -76,7 +101,7 @@ export const MembershipPage = () => {
                       <div className="space-y-3 pt-4 border-t border-white/10">
                         {plan.features.map((feat, idx) => (
                           <div key={idx} className="flex items-start gap-2.5 text-xs text-gray-300">
-                            <div className="p-0.5 rounded-full bg-crimson-500/20 text-crimson-500 mt-0.5">
+                            <div className="p-0.5 rounded-full bg-amber-500/20 text-amber-500 mt-0.5">
                               <Check className="w-3.5 h-3.5" />
                             </div>
                             <span>{feat}</span>
@@ -87,10 +112,10 @@ export const MembershipPage = () => {
 
                     <div className="pt-8">
                       <Button
-                        variant={plan.popular ? 'primary' : 'outline'}
+                        variant={isElite ? 'primary' : 'outline'}
                         size="md"
                         className="w-full"
-                        onClick={() => navigate('/auth')}
+                        onClick={() => handleSubscribe(plan)}
                       >
                         Subscribe to {plan.name}
                       </Button>
@@ -110,7 +135,7 @@ export const MembershipPage = () => {
                   <tr>
                     <th className="px-6 py-4">Capability</th>
                     <th className="px-6 py-4">Core Access</th>
-                    <th className="px-6 py-4 text-crimson-500">Crimson Elite</th>
+                    <th className="px-6 py-4 text-amber-500 font-bold">Crimson Elite</th>
                     <th className="px-6 py-4">VIP Black Executive</th>
                   </tr>
                 </thead>
@@ -118,7 +143,7 @@ export const MembershipPage = () => {
                   <tr>
                     <td className="px-6 py-4 font-semibold text-white">Global Multi-Branch Access</td>
                     <td className="px-6 py-4 text-gray-500">Single Branch</td>
-                    <td className="px-6 py-4 text-crimson-500 font-bold">Unlimited</td>
+                    <td className="px-6 py-4 text-amber-500 font-bold">Unlimited</td>
                     <td className="px-6 py-4 text-emerald-400 font-bold">Unlimited 24/7</td>
                   </tr>
                   <tr>

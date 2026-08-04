@@ -31,8 +31,15 @@ export const authService = {
   },
 
   getCurrentUser: () => {
-    const saved = localStorage.getItem('gymnex_user');
-    return saved ? JSON.parse(saved) : { id: 'admin-1', name: 'Director Vance', email: 'admin@gymnex.com', role: 'Admin', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400' };
+    try {
+      const saved = localStorage.getItem('gymnex_user');
+      if (saved && saved !== 'undefined') {
+        return JSON.parse(saved);
+      }
+    } catch (err) {
+      console.warn('Invalid saved user in localStorage:', err);
+    }
+    return { id: 'admin-1', name: 'Director Vance', email: 'admin@gymnex.com', role: 'Admin', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400' };
   }
 };
 

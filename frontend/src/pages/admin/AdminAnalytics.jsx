@@ -2,7 +2,6 @@ import React from 'react';
 import { PageTransition } from '../../components/motion/MotionComponents';
 import { Card, Badge, StatCard } from '../../components/ui/UIComponents';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
-import { DollarSign, Users, Activity, TrendingUp } from 'lucide-react';
 
 const classPopularity = [
   { name: 'Spin Velocity', count: 420 },
@@ -12,9 +11,9 @@ const classPopularity = [
 ];
 
 const revenueSplit = [
-  { name: 'VIP Crimson', value: 55, color: '#DC143C' },
+  { name: 'VIP Crimson', value: 55, color: '#F5A623' },
   { name: 'Core Access', value: 25, color: '#4b5563' },
-  { name: 'VIP Black', value: 20, color: '#FF1E42' },
+  { name: 'VIP Black', value: 20, color: '#FFB800' },
 ];
 
 export const AdminAnalytics = () => {
@@ -36,7 +35,7 @@ export const AdminAnalytics = () => {
                   <XAxis dataKey="name" stroke="#6b7280" fontSize={11} />
                   <YAxis stroke="#6b7280" fontSize={11} />
                   <Tooltip contentStyle={{ backgroundColor: '#121218', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }} />
-                  <Bar dataKey="count" fill="#DC143C" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="count" fill="#F5A623" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

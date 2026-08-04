@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PageTransition } from '../../components/motion/MotionComponents';
 import { Card, Badge, Button } from '../../components/ui/UIComponents';
-import { MOCK_PROGRAMS } from '../../data/mockData';
+import { api } from '../../services/api';
 import { Plus, Dumbbell } from 'lucide-react';
 
 export const AdminPrograms = () => {
+  const [programs, setPrograms] = useState([]);
+
+  useEffect(() => {
+    const fetchLivePrograms = async () => {
+      const data = await api.getPrograms();
+      if (data && data.length > 0) {
+        const unique = Array.from(
+          new Map(data.map((item) => [item.title?.toLowerCase().trim() || item._id || item.id, item])).values()
+        );
+        setPrograms(unique);
+      }
+    };
+    fetchLivePrograms();
+  }, []);
+
   return (
     <PageTransition>
       <div className="space-y-6">
@@ -17,15 +32,15 @@ export const AdminPrograms = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {MOCK_PROGRAMS.map((prog) => (
-            <Card key={prog.id} className="space-y-3">
-              <img src={prog.image} alt={prog.title} className="w-full h-40 rounded-xl object-cover" />
-              <Badge variant="crimson">{prog.level}</Badge>
+          {programs.map((prog) => (
+            <Card key={prog._id || prog.id || prog.programId} className="space-y-3">
+              <img src={prog.image || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800'} alt={prog.title} className="w-full h-40 rounded-xl object-cover" />
+              <Badge variant="crimson">{prog.level || 'Intermediate'}</Badge>
               <h3 className="text-base font-bold text-white font-display uppercase">{prog.title}</h3>
               <p className="text-xs text-gray-400">{prog.description}</p>
               <div className="flex justify-between text-xs text-gray-400 pt-2 border-t border-white/10">
-                <span>{prog.duration}</span>
-                <span>{prog.exercisesCount} Exercises Prescribed</span>
+                <span>{prog.duration || '8 Weeks'}</span>
+                <span>{prog.exercisesCount || 12} Exercises Prescribed</span>
               </div>
             </Card>
           ))}

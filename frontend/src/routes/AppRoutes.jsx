@@ -18,6 +18,9 @@ import { AboutPage } from '../pages/public/AboutPage';
 import { CorporatePage } from '../pages/public/CorporatePage';
 import { ContactPage } from '../pages/public/ContactPage';
 import { AuthPage } from '../pages/auth/AuthPage';
+import { AdminLoginPage } from '../pages/auth/AdminLoginPage';
+import { TrainerLoginPage } from '../pages/auth/TrainerLoginPage';
+import { MemberLoginPage } from '../pages/auth/MemberLoginPage';
 
 // Admin Pages
 import { AdminOverview } from '../pages/admin/AdminOverview';
@@ -66,7 +69,7 @@ export const AppRoutes = () => {
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/trainers" element={<TrainersPage />} />
         <Route path="/membership" element={<MembershipPage />} />
-        <Route path="/classes" element={<ClassesPage />} />
+        <Route path="/classes" element={<Navigate to="/programs" replace />} />
         <Route path="/branches" element={<BranchesPage />} />
         <Route path="/facilities" element={<FacilitiesPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
@@ -76,6 +79,14 @@ export const AppRoutes = () => {
         <Route path="/corporate" element={<CorporatePage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/auth/admin" element={<AdminLoginPage />} />
+        <Route path="/auth/trainer" element={<TrainerLoginPage />} />
+        <Route path="/auth/member" element={<MemberLoginPage />} />
+        <Route path="/login/admin" element={<AdminLoginPage />} />
+        <Route path="/login/trainer" element={<TrainerLoginPage />} />
+        <Route path="/login/member" element={<MemberLoginPage />} />
+        <Route path="/auth/:roleParam" element={<AuthPage />} />
+        <Route path="/login/:roleParam" element={<AuthPage />} />
       </Route>
 
       {/* Admin Dashboard Routes */}
@@ -84,12 +95,12 @@ export const AppRoutes = () => {
         <Route path="members" element={<AdminMembers />} />
         <Route path="trainers" element={<AdminTrainers />} />
         <Route path="memberships" element={<AdminMemberships />} />
-        <Route path="programs" element={<AdminPrograms />} />
-        <Route path="diet" element={<AdminDiet />} />
+        <Route path="programs" element={<Navigate to="/admin" replace />} />
+        <Route path="diet" element={<Navigate to="/admin" replace />} />
         <Route path="attendance" element={<AdminAttendance />} />
         <Route path="schedule" element={<AdminSchedule />} />
         <Route path="equipment" element={<AdminEquipment />} />
-        <Route path="payments" element={<AdminPayments />} />
+        <Route path="payments" element={<Navigate to="/admin" replace />} />
         <Route path="analytics" element={<AdminAnalytics />} />
         <Route path="notifications" element={<AdminNotifications />} />
         <Route path="settings" element={<AdminSettings />} />

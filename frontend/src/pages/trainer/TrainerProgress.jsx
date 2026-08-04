@@ -23,7 +23,7 @@ export const TrainerProgress = () => {
         <Card className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-white font-display uppercase">Squat 1RM vs Body Fat % Trend</h3>
-            <Badge variant="crimson">Alexander Wright</Badge>
+            <Badge variant="amber">Alexander Wright</Badge>
           </div>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
@@ -32,7 +32,7 @@ export const TrainerProgress = () => {
                 <XAxis dataKey="week" stroke="#6b7280" />
                 <YAxis stroke="#6b7280" />
                 <Tooltip contentStyle={{ backgroundColor: '#121218', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }} />
-                <Line type="monotone" dataKey="squat" name="Squat (kg)" stroke="#DC143C" strokeWidth={3} />
+                <Line type="monotone" dataKey="squat" name="Squat (kg)" stroke="#F5A623" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
           </div>

@@ -14,7 +14,6 @@ export const DashboardLayout = () => {
           <Outlet />
         </main>
       </div>
-      <QuickRoleSwitcher />
     </div>
   );
 };

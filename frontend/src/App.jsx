@@ -2,11 +2,15 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { AppRoutes } from './routes/AppRoutes';
+import { ScrollToTop } from './components/shared/ScrollToTop';
+import { IntroLoader } from './components/shared/IntroLoader';
 import { Toaster } from 'react-hot-toast';
 
 export default function App() {
   return (
     <BrowserRouter>
+      <IntroLoader />
+      <ScrollToTop />
       <AuthProvider>
         <Toaster
           position="top-right"
@@ -15,15 +19,15 @@ export default function App() {
             style: {
               background: '#121218',
               color: '#ffffff',
-              border: '1px solid rgba(220, 20, 60, 0.4)',
+              border: '1px solid rgba(245, 166, 35, 0.4)',
               borderRadius: '12px',
               fontSize: '12px',
               fontWeight: 500,
             },
             success: {
               iconTheme: {
-                primary: '#DC143C',
-                secondary: '#ffffff',
+                primary: '#F5A623',
+                secondary: '#000000',
               },
             },
           }}

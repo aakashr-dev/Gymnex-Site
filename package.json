@@ -1,0 +1,12 @@
+{
+  "name": "gymnex-monorepo",
+  "private": true,
+  "version": "2.0.0",
+  "description": "GYMNEX Enterprise Gym SaaS Platform",
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "server": "npm start --prefix backend",
+    "build": "npm run build --prefix frontend",
+    "preview": "npm run preview --prefix frontend"
+  }
+}

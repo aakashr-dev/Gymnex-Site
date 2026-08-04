@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { PageTransition } from '../../components/motion/MotionComponents';
 import { SectionHeader, Button, Card } from '../../components/ui/UIComponents';
+import { api } from '../../services/api';
 import { Mail, Phone, MapPin, MessageSquare, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const ContactPage = () => {
   const [openFaq, setOpenFaq] = useState(0);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
   const faqs = [
     { q: 'How do I access the gym after hours?', a: 'VIP Crimson and Black Executive members receive 24/7 access using the GYMNEX Mobile App QR Pass at our turnstile scanners.' },
@@ -13,9 +15,15 @@ export const ContactPage = () => {
     { q: 'Are personal training sessions included?', a: 'Crimson Elite passes include 2 monthly sessions, and VIP Black includes unlimited 1-on-1 coaching.' }
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success('Message sent! Our concierges will respond shortly.');
+    try {
+      await api.submitContact(formData);
+      toast.success('Message sent! Our concierges will respond shortly.');
+      setFormData({ name: '', email: '', message: '' });
+    } catch (err) {
+      toast.error('Failed to submit message.');
+    }
   };
 
   return (

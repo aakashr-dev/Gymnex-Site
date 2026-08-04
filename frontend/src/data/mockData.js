@@ -77,6 +77,7 @@ export const MOCK_TRAINERS = [
   {
     id: 'trn-1',
     name: 'Marcus Vance',
+    gender: 'male',
     role: 'Master Strength & Bodybuilding Specialist',
     email: 'marcus.v@gymnex.com',
     avatar: 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&q=80&w=600',
@@ -91,6 +92,7 @@ export const MOCK_TRAINERS = [
   {
     id: 'trn-2',
     name: 'Sarah Jenkins',
+    gender: 'female',
     role: 'Head of Functional Fitness & HIIT',
     email: 'sarah.j@gymnex.com',
     avatar: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=600',
@@ -105,6 +107,7 @@ export const MOCK_TRAINERS = [
   {
     id: 'trn-3',
     name: 'Dmitri Volkov',
+    gender: 'male',
     role: 'Mobility & Recovery Specialist',
     email: 'dmitri.v@gymnex.com',
     avatar: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&q=80&w=600',
@@ -121,42 +124,107 @@ export const MOCK_TRAINERS = [
 export const MOCK_PROGRAMS = [
   {
     id: 'prog-1',
-    title: 'TITAN HYPERTROPHY PROTOCOL',
-    category: 'Hypertrophy & Strength',
+    title: 'TITAN BODYBUILDING & MASS',
+    category: 'Muscle & Mass Building',
     level: 'Advanced',
     duration: '12 Weeks',
     workoutsPerWeek: 5,
     instructor: 'Marcus Vance',
-    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1200',
-    description: 'An aggressive periodized hypertrophy system engineered to maximize muscle density, mechanical tension, and myofibrillar growth.',
-    target: 'Muscle Gain & Power',
+    image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&q=80&w=800',
+    description: 'Intense 5-day bodybuilding split targeting maximum chest width, lats thickness, bicep peak, and leg quad sweep.',
+    target: 'Muscle Mass & Hypertrophy',
     exercisesCount: 42
   },
   {
     id: 'prog-2',
-    title: 'INFERNO SHRED SYSTEM',
-    category: 'Metabolic Fat Loss',
+    title: 'INFERNO BELLY FAT SHRED',
+    category: 'Fat Loss & Shredding',
     level: 'Intermediate',
     duration: '8 Weeks',
     workoutsPerWeek: 4,
     instructor: 'Sarah Jenkins',
-    image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=1200',
-    description: 'High-density peripheral heart action paired with anaerobic intervals designed to melt fat while preserving elite athletic muscle.',
-    target: 'Fat Loss & Conditioning',
+    image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=800',
+    description: 'High-intensity dumbbell circuits and treadmill sprint intervals engineered to burn 800+ calories per session.',
+    target: 'Fat Loss & Body Recomposition',
     exercisesCount: 36
   },
   {
     id: 'prog-3',
-    title: 'ATHLETIC MOBILITY & RECOVERY',
-    category: 'Mobility & Flex',
+    title: 'POWERLIFTING 5x5 HEAVY STRENGTH',
+    category: 'Strength & Powerlifting',
+    level: 'Elite',
+    duration: '10 Weeks',
+    workoutsPerWeek: 4,
+    instructor: 'Marcus Vance',
+    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800',
+    description: 'Heavy barbell squat, bench press, and deadlift progressive overload protocol for raw physical strength.',
+    target: 'Maximal Barbell Strength',
+    exercisesCount: 28
+  },
+  {
+    id: 'prog-4',
+    title: 'V-TAPER CHEST & BACK SCULPT',
+    category: 'Muscle & Mass Building',
+    level: 'Intermediate',
+    duration: '8 Weeks',
+    workoutsPerWeek: 4,
+    instructor: 'Marcus Vance',
+    image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=800',
+    description: 'Focused hypertrophy program for wide 3D shoulders, aesthetic lat spread, and chiseled upper chest.',
+    target: 'Aesthetic V-Taper Physique',
+    exercisesCount: 38
+  },
+  {
+    id: 'prog-5',
+    title: 'SIX-PACK ABS & CORE DESTRUCTION',
+    category: 'Functional & Calisthenics',
     level: 'All Levels',
     duration: '6 Weeks',
     workoutsPerWeek: 3,
     instructor: 'Dmitri Volkov',
-    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=1200',
-    description: 'Unlocking restricted fascia, restoring full joint range of motion, and preventing chronic lifting injuries.',
-    target: 'Joint Health & Flexibility',
-    exercisesCount: 28
+    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=800',
+    description: 'Deep core stabilization, hanging leg raises, cable woodchoppers, and abdominal muscle definition protocol.',
+    target: 'Abdominal Definition & Core Power',
+    exercisesCount: 32
+  },
+  {
+    id: 'prog-6',
+    title: 'METABOLIC KETTLEBELL & DUMBBELL BURN',
+    category: 'Fat Loss & Shredding',
+    level: 'All Levels',
+    duration: '6 Weeks',
+    workoutsPerWeek: 4,
+    instructor: 'Sarah Jenkins',
+    image: 'https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&q=80&w=800',
+    description: 'Full-body dumbbell supersets and kettlebell swings designed for maximum post-exercise oxygen consumption (EPOC).',
+    target: 'Calorie Burn & Conditioning',
+    exercisesCount: 30
+  },
+  {
+    id: 'prog-7',
+    title: 'ARMS & SHOULDERS HYPERTROPHY',
+    category: 'Muscle & Mass Building',
+    level: 'Intermediate',
+    duration: '6 Weeks',
+    workoutsPerWeek: 3,
+    instructor: 'Marcus Vance',
+    image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&q=80&w=800',
+    description: 'High-volume bicep peak isolation, tricep extension overload, and deltoid lateral raise specialization.',
+    target: 'Arm Volume & Shoulder Width',
+    exercisesCount: 26
+  },
+  {
+    id: 'prog-8',
+    title: 'SQUAT & DEADLIFT MAX OVERLOAD',
+    category: 'Strength & Powerlifting',
+    level: 'Advanced',
+    duration: '8 Weeks',
+    workoutsPerWeek: 4,
+    instructor: 'Marcus Vance',
+    image: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&q=80&w=800',
+    description: 'Lower body posterior chain strength protocol focusing on heavy squat technique and deadlift lockout power.',
+    target: 'Lower Body Raw Power',
+    exercisesCount: 34
   }
 ];
 
@@ -172,7 +240,7 @@ export const MOCK_CLASSES = [
     capacity: 25,
     booked: 21,
     intensity: 'Extreme',
-    image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=800'
+    image: '/class-1.jpg'
   },
   {
     id: 'cls-2',
@@ -207,31 +275,190 @@ export const MOCK_BRANCHES = [
     id: 'br-1',
     name: 'GYMNEX Manhattan Flagship',
     city: 'New York, NY',
+    region: 'North America',
     address: '450 Fifth Avenue, Midtown East',
     phone: '+1 (212) 555-0199',
-    hours: '24/7 Access for VIP',
+    hours: '24/7 VIP Access',
+    status: 'Open Now',
+    area: '45,000 sq ft',
+    membersCount: '4,200+',
+    coachesCount: 34,
+    rating: 4.9,
+    description: 'Our global flagship sanctuary featuring 4 floors of Technogym Biostrenth, cryotherapy vaults, rooftop sprint track, and executive spa.',
     image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800',
-    amenities: ['Cryotherapy Chamber', 'Olympic Lifting Platforms', 'Rooftop Sprint Track', 'Executive Spa']
+    amenities: ['Cryotherapy Chamber', 'Olympic Lifting Platforms', 'Rooftop Sprint Track', 'Executive Spa', 'Hydro Pool', 'Valet Parking'],
+    coords: { x: 30, y: 38 },
+    hasParking: true,
+    hasPool: true,
+    hasRecovery: true
   },
   {
     id: 'br-2',
     name: 'GYMNEX Beverly Hills Sanctuary',
     city: 'Los Angeles, CA',
+    region: 'North America',
     address: '9600 Wilshire Blvd, Beverly Hills',
     phone: '+1 (310) 555-0144',
     hours: '05:00 AM - 12:00 AM',
+    status: 'Open Now',
+    area: '38,000 sq ft',
+    membersCount: '3,800+',
+    coachesCount: 28,
+    rating: 4.95,
+    description: 'Ultra-exclusive West Coast sanctuary with private VIP suites, organic fuel bar, infrared therapy pods, and hydrotherapy pool.',
     image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=800',
-    amenities: ['Infrared Sauna', 'Private VIP Suites', 'Organic Fuel Bar', 'Hydrotherapy Pool']
+    amenities: ['Infrared Sauna', 'Private VIP Suites', 'Organic Fuel Bar', 'Hydrotherapy Pool', 'DEXA Lab', 'Valet Parking'],
+    coords: { x: 18, y: 42 },
+    hasParking: true,
+    hasPool: true,
+    hasRecovery: true
   },
   {
     id: 'br-3',
     name: 'GYMNEX London Mayfair',
     city: 'London, UK',
+    region: 'Europe',
     address: '14 Berkeley Square, Mayfair',
     phone: '+44 20 7946 0912',
     hours: '06:00 AM - 11:00 PM',
+    status: 'Open Now',
+    area: '32,000 sq ft',
+    membersCount: '2,900+',
+    coachesCount: 24,
+    rating: 4.88,
+    description: 'Bespoke European sanctuary in heart of Mayfair, offering biostrenth suites, cold plunge pools, and biomechanics lab.',
     image: 'https://images.unsplash.com/photo-1570829460005-c840387bb1ca?auto=format&fit=crop&q=80&w=800',
-    amenities: ['Technogym Biostrenth Suite', 'Cold Plunge Pools', 'Physiotherapy Suite', 'Valet Parking']
+    amenities: ['Technogym Biostrenth', 'Cold Plunge Pools', 'Physiotherapy Suite', 'Valet Parking', 'Executive Sauna'],
+    coords: { x: 48, y: 30 },
+    hasParking: true,
+    hasPool: true,
+    hasRecovery: true
+  },
+  {
+    id: 'br-4',
+    name: 'GYMNEX Tokyo Ginza',
+    city: 'Tokyo, Japan',
+    region: 'Asia Pacific',
+    address: '6-10-1 Ginza, Chuo-ku',
+    phone: '+81 3 5555 0188',
+    hours: '24/7 VIP Access',
+    status: 'Open Now',
+    area: '40,000 sq ft',
+    membersCount: '3,500+',
+    coachesCount: 30,
+    rating: 4.96,
+    description: 'High-tech Asian flagship engineered with hyperbaric recovery chambers, Japanese Onsen hydro-spa, and AI gait lab.',
+    image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=800',
+    amenities: ['Japanese Onsen Spa', 'Hyperbaric Chamber', 'AI Gait Analysis', 'Olympic Platforms', 'Protein Bar'],
+    coords: { x: 82, y: 44 },
+    hasParking: true,
+    hasPool: true,
+    hasRecovery: true
+  },
+  {
+    id: 'br-5',
+    name: 'GYMNEX Dubai Marina',
+    city: 'Dubai, UAE',
+    region: 'Middle East',
+    address: 'Marina Plaza, Level 4-6',
+    phone: '+971 4 555 0190',
+    hours: '24/7 VIP Access',
+    status: 'Open Now',
+    area: '50,000 sq ft',
+    membersCount: '5,100+',
+    coachesCount: 42,
+    rating: 4.97,
+    description: 'Architectural marvel overlooking Dubai Marina with indoor sprint track, altitude training room, and VIP private elevators.',
+    image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=800',
+    amenities: ['Altitude Chamber', 'Rooftop Infinity Pool', 'Cryo Vault', 'Executive VIP Suite', 'Valet Parking'],
+    coords: { x: 62, y: 46 },
+    hasParking: true,
+    hasPool: true,
+    hasRecovery: true
+  },
+  {
+    id: 'br-6',
+    name: 'GYMNEX Sydney Harbour',
+    city: 'Sydney, Australia',
+    region: 'Asia Pacific',
+    address: '1 Martin Place, Sydney CBD',
+    phone: '+61 2 9555 0133',
+    hours: '05:30 AM - 10:30 PM',
+    status: 'Open Now',
+    area: '30,000 sq ft',
+    membersCount: '2,600+',
+    coachesCount: 20,
+    rating: 4.89,
+    description: 'Harbourfront sanctuary featuring open-air performance deck, Olympic lifting bays, and recovery lounge.',
+    image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&q=80&w=800',
+    amenities: ['Harbour View Deck', 'Olympic Lifting Bays', 'Infrared Sauna', 'Fuel Bar', 'Locker Valet'],
+    coords: { x: 88, y: 78 },
+    hasParking: false,
+    hasPool: false,
+    hasRecovery: true
+  }
+];
+
+export const MOCK_BRANCH_TESTIMONIALS = [
+  {
+    id: 't-1',
+    name: 'Harrison Sterling',
+    role: 'Managing Director & Athlete',
+    branch: 'GYMNEX Manhattan Flagship',
+    rating: 5,
+    quote: 'The Technogym Biostrenth suite and cryotherapy chambers at Manhattan Flagship completely changed my recovery cycle. Unmatched standard of fitness in NYC.',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300'
+  },
+  {
+    id: 't-2',
+    name: 'Victoria Vance',
+    role: 'Triathlete & Executive',
+    branch: 'GYMNEX Beverly Hills Sanctuary',
+    rating: 5,
+    quote: 'Having global access to Beverly Hills and Mayfair when traveling gives me seamless training continuity. The private VIP suites are world-class.',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300'
+  },
+  {
+    id: 't-3',
+    name: 'Kenji Takahashi',
+    role: 'Powerlifter & Tech Lead',
+    branch: 'GYMNEX Tokyo Ginza',
+    rating: 5,
+    quote: 'The precision of the AI gait analysis and hyperbaric recovery in Ginza is unmatched. It feels like training inside a futuristic sports lab.',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300'
+  }
+];
+
+export const MOCK_BRANCH_FAQS = [
+  {
+    id: 'faq-1',
+    question: 'Is my GYMNEX membership valid across all global branches?',
+    answer: 'Yes! Crimson Elite Pass and VIP Black Executive members enjoy unlimited global multi-club access to all GYMNEX sanctuaries worldwide without extra charges.'
+  },
+  {
+    id: 'faq-2',
+    question: 'Can I bring a guest when visiting a different branch?',
+    answer: 'Crimson Elite and VIP Black members receive complimentary monthly guest passes. Guests can experience all club facilities including group sessions and spa facilities.'
+  },
+  {
+    id: 'faq-3',
+    question: 'Is valet parking available at all flagship locations?',
+    answer: 'Valet parking is complimentary for VIP Black members at our Manhattan, Beverly Hills, London Mayfair, Tokyo, and Dubai locations.'
+  },
+  {
+    id: 'faq-4',
+    question: 'Are day lockers and permanent locker rentals available?',
+    answer: 'All locations offer high-security digital day lockers. Executive permanent lockers with laundry service are included with VIP Black Executive memberships.'
+  },
+  {
+    id: 'faq-5',
+    question: 'Can I transfer my dedicated Personal Trainer sessions between locations?',
+    answer: 'Yes, your 1-on-1 coaching credits can be redeemed with certified master trainers at any GYMNEX location globally via the member mobile app.'
+  },
+  {
+    id: 'faq-6',
+    question: 'Do you offer custom corporate membership packages for enterprise teams?',
+    answer: 'We provide corporate wellness tiers with global multi-location access, DEXA body scans, and private team training events. Contact our executive concierge team for details.'
   }
 ];
 

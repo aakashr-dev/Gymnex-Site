@@ -22,7 +22,7 @@ export const AdminSettings = () => {
             </div>
             <div>
               <label className="block text-gray-400 uppercase font-semibold mb-1">Primary Accent Color Token</label>
-              <input type="text" defaultValue="#DC143C (Deep Crimson)" disabled className="w-full px-3 py-2 bg-dark-base border border-white/10 rounded-xl text-gray-500" />
+              <input type="text" defaultValue="#F5A623 (Warm Amber)" disabled className="w-full px-3 py-2 bg-dark-base border border-white/10 rounded-xl text-gray-400 font-mono font-bold" />
             </div>
             <div>
               <label className="block text-gray-400 uppercase font-semibold mb-1">Turnstile API Access Key</label>

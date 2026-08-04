@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PageTransition } from '../../components/motion/MotionComponents';
 import { Card, Button, Badge } from '../../components/ui/UIComponents';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
@@ -9,7 +9,7 @@ const bodyData = [
   { week: 'W1', weight: 85.0, fat: 16.2 },
   { week: 'W2', weight: 84.2, fat: 15.6 },
   { week: 'W3', weight: 83.5, fat: 15.0 },
-  { week: 'W4', squat: 82.5, fat: 14.2 },
+  { week: 'W4', weight: 82.5, fat: 14.2 },
 ];
 
 export const MemberProgress = () => {
@@ -35,7 +35,7 @@ export const MemberProgress = () => {
                 <XAxis dataKey="week" stroke="#6b7280" />
                 <YAxis stroke="#6b7280" />
                 <Tooltip contentStyle={{ backgroundColor: '#121218', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }} />
-                <Line type="monotone" dataKey="weight" stroke="#DC143C" strokeWidth={3} />
+                <Line type="monotone" dataKey="weight" stroke="#F5A623" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
           </div>

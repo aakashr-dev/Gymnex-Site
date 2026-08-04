@@ -12,7 +12,6 @@ export const PublicLayout = () => {
         <Outlet />
       </main>
       <Footer />
-      <QuickRoleSwitcher />
     </div>
   );
 };
