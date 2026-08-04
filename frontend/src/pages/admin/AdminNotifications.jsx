@@ -70,7 +70,7 @@ export const AdminNotifications = () => {
             <h1 className="text-3xl font-extrabold text-white font-display uppercase">NOTIFICATION BROADCAST CENTER</h1>
             <p className="text-xs text-gray-400">Send push announcements, review system alerts, and track facility logs.</p>
           </div>
-          <Button variant="glass" size="sm" onClick={fetchNotifications} icon={RefreshCw} className={`text-xs ${loading ? 'animate-spin' : ''}`}>
+          <Button variant="glass" size="sm" onClick={fetchNotifications} icon={RefreshCw} className="text-xs">
             Refresh
           </Button>
         </div>

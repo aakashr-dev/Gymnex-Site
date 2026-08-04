@@ -2,6 +2,7 @@ import express from 'express';
 import {
   getAllTrainers,
   getTrainerById,
+  getMyTrainerProfile,
   createTrainer,
   updateTrainer,
   deleteTrainer,
@@ -12,6 +13,7 @@ import { verifyToken, authorizeRoles } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router.get('/', getAllTrainers);
+router.get('/me/profile', verifyToken, getMyTrainerProfile);
 router.get('/:id', getTrainerById);
 router.get('/:id/members', verifyToken, getTrainerMembers);
 router.post('/', verifyToken, authorizeRoles('Admin'), createTrainer);

@@ -99,6 +99,29 @@ export const AdminLoginPage = () => {
               </Button>
             </form>
 
+            {/* Quick Demo Credentials Assistant */}
+            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs space-y-2">
+              <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider block">
+                SEEDED ADMIN CREDENTIALS:
+              </span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setEmail('admin@gmail.com'); setPassword('Admin@123'); }}
+                  className="flex-1 py-1.5 px-2 rounded-lg bg-dark-card border border-white/10 text-white font-mono text-[10px] hover:border-amber-500 transition-colors"
+                >
+                  admin@gmail.com
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setEmail('admin@email.com'); setPassword('Admin@123'); }}
+                  className="flex-1 py-1.5 px-2 rounded-lg bg-dark-card border border-white/10 text-white font-mono text-[10px] hover:border-amber-500 transition-colors"
+                >
+                  admin@email.com
+                </button>
+              </div>
+            </div>
+
             {/* Role Switch Links Footer */}
             <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-gray-400">
               <span className="font-bold uppercase tracking-wider">Switch Portal:</span>

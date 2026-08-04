@@ -49,7 +49,7 @@ export const MemberNotifications = () => {
             <h1 className="text-3xl font-extrabold text-white font-display uppercase">MY NOTIFICATIONS</h1>
             <p className="text-xs text-gray-400">Class reservation confirmations, coach updates, and renewal notices.</p>
           </div>
-          <Button variant="glass" size="sm" onClick={fetchNotifications} icon={RefreshCw} className={`text-xs ${loading ? 'animate-spin' : ''}`}>
+          <Button variant="glass" size="sm" onClick={fetchNotifications} icon={RefreshCw} className="text-xs">
             Refresh
           </Button>
         </div>

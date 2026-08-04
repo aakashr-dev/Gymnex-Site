@@ -114,7 +114,7 @@ export const AdminAttendance = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button variant="glass" size="sm" onClick={loadData} icon={RefreshCw} className={`text-xs ${loading ? 'animate-spin' : ''}`}>
+            <Button variant="glass" size="sm" onClick={loadData} icon={RefreshCw} className="text-xs">
               Sync
             </Button>
             <Button

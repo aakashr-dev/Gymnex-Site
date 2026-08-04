@@ -61,6 +61,41 @@ export const getTrainerById = async (req, res) => {
   }
 };
 
+export const getMyTrainerProfile = async (req, res) => {
+  try {
+    const userId = req.user?._id || req.user?.id;
+    const userEmail = req.user?.email ? req.user.email.toLowerCase() : '';
+
+    let trainer = await Trainer.findOne({
+      $or: [
+        ...(userId ? [{ user: userId }] : []),
+        ...(userEmail ? [{ email: userEmail }] : [])
+      ]
+    }).populate('branch');
+
+    if (!trainer && userEmail) {
+      trainer = await Trainer.findOne().populate('branch');
+    }
+
+    if (!trainer) {
+      return sendError(res, 'Trainer profile document not found.', 404);
+    }
+
+    const assignedMembers = await Member.find({
+      $or: [{ personalTrainer: trainer._id }, { assignedTrainer: trainer._id }]
+    }).populate('membership branch');
+
+    const result = trainer.toObject ? trainer.toObject() : trainer;
+    result.assignedMembers = assignedMembers;
+    result.assignedMembersCount = assignedMembers.length;
+
+    return sendSuccess(res, 'Authenticated trainer profile fetched successfully.', result);
+  } catch (err) {
+    console.error('getMyTrainerProfile error:', err);
+    return sendError(res, err.message, 500);
+  }
+};
+
 export const createTrainer = async (req, res) => {
   try {
     const { name, email, password, phone, specialization, experience, salary, availabilityStatus } = req.body;
@@ -96,6 +131,7 @@ export const createTrainer = async (req, res) => {
       user: userDoc._id,
       name: name || 'Trainer Staff',
       email: normalizedEmail,
+      password: targetPassword,
       phone: phone || '',
       specialization: specialization || 'Strength Coach',
       experience: experience || '5+ Years',
@@ -114,6 +150,21 @@ export const updateTrainer = async (req, res) => {
   try {
     const trainer = await Trainer.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!trainer) return sendError(res, 'Trainer not found.', 404);
+
+    if (req.body.password && String(req.body.password).trim()) {
+      const newPass = String(req.body.password).trim();
+      trainer.password = newPass;
+      await trainer.save();
+
+      if (trainer.user) {
+        const userDoc = await User.findById(trainer.user).select('+password');
+        if (userDoc) {
+          userDoc.password = newPass;
+          await userDoc.save();
+        }
+      }
+    }
+
     return sendSuccess(res, 'Trainer updated successfully.', trainer);
   } catch (err) {
     return sendError(res, err.message, 400);

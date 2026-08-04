@@ -145,7 +145,7 @@ export const AdminTrainers = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button variant="glass" size="sm" onClick={loadTrainers} icon={RefreshCw} className={`text-xs ${loading ? 'animate-spin' : ''}`}>
+            <Button variant="glass" size="sm" onClick={loadTrainers} icon={RefreshCw} className="text-xs">
               Sync
             </Button>
             <Button
@@ -256,7 +256,7 @@ export const AdminTrainers = () => {
                   <div className="grid grid-cols-2 gap-2 text-xs p-3 rounded-xl bg-white/5 border border-white/5 text-center">
                     <div>
                       <span className="text-[10px] text-gray-500 uppercase font-bold block">Assigned Clients</span>
-                      <span className="text-base font-black text-amber-400 font-display">{t.assignedMembersCount || 4} Members</span>
+                      <span className="text-base font-black text-amber-400 font-display">{(t.assignedMembersCount ?? 0)} Members</span>
                     </div>
                     <div>
                       <span className="text-[10px] text-gray-500 uppercase font-bold block">Rating</span>
@@ -293,7 +293,7 @@ export const AdminTrainers = () => {
                       onClick={() => handleViewAssignedMembers(t)}
                       className="flex-1 text-[11px] font-bold"
                     >
-                      <Users className="w-3.5 h-3.5 mr-1 text-amber-400" /> Clients ({t.assignedMembersCount || 4})
+                      <Users className="w-3.5 h-3.5 mr-1 text-amber-400" /> Clients ({(t.assignedMembersCount ?? 0)})
                     </Button>
 
                     <button

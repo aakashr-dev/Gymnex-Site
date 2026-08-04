@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { sendError } from '../utils/apiResponse.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'gymnex_enterprise_super_secret_jwt_key_2026';
 
@@ -6,9 +7,7 @@ export const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    // Dev/Demo fallback user so API endpoints work seamlessly without 401 Unauthorized errors
-    req.user = { id: 'admin-fallback', role: 'Admin', name: 'System Admin', email: 'admin@gymnex.com' };
-    return next();
+    return sendError(res, 'Authentication required. Missing Bearer token.', 401);
   }
 
   const token = authHeader.split(' ')[1];
@@ -17,20 +16,17 @@ export const verifyToken = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    // Handle mock-jwt tokens or expired tokens gracefully in dev environment
-    req.user = { id: 'admin-fallback', role: 'Admin', name: 'System Admin', email: 'admin@gymnex.com' };
-    next();
+    return sendError(res, 'Invalid or expired authentication token.', 401);
   }
 };
 
 export const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
-      req.user = { id: 'admin-fallback', role: 'Admin', name: 'System Admin', email: 'admin@gymnex.com' };
+      return sendError(res, 'Authentication required.', 401);
     }
     if (allowedRoles.length > 0 && !allowedRoles.includes(req.user.role)) {
-      // Fallback for admin role in dev environment
-      req.user.role = 'Admin';
+      return sendError(res, 'Insufficient permissions for this resource.', 403);
     }
     next();
   };

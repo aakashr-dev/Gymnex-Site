@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const trainerSchema = new mongoose.Schema(
   {
@@ -7,6 +8,7 @@ const trainerSchema = new mongoose.Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, required: true },
     email: { type: String, default: '' },
+    password: { type: String, default: '', select: false },
     phone: { type: String, default: '' },
     role: { type: String, default: 'Master Coach' },
     experience: { type: String, default: '5+ Years' },
@@ -28,5 +30,12 @@ const trainerSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+trainerSchema.pre('save', async function () {
+  if (!this.isModified('password') || !this.password) return;
+  if (this.password.startsWith('$2a$') || this.password.startsWith('$2b$')) return;
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 export const Trainer = mongoose.models.Trainer || mongoose.model('Trainer', trainerSchema);

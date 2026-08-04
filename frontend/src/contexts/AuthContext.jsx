@@ -50,20 +50,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const switchRole = (newRole) => {
-    setRole(newRole);
-    if (newRole === 'Admin') {
-      const adminUser = { id: 'admin-1', name: 'Director Vance', email: 'admin@gymnex.com', role: 'Admin', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400' };
-      setUser(adminUser);
-      toast.success('Switched to Admin Role');
-    } else if (newRole === 'Trainer') {
-      const trainerUser = { id: 'trn-1', name: 'Marcus Vance', email: 'marcus.v@gymnex.com', role: 'Trainer', avatar: 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&q=80&w=600' };
-      setUser(trainerUser);
-      toast.success('Switched to Trainer Role');
-    } else {
-      const memberUser = { id: 'mem-101', name: 'Alexander Wright', email: 'alex.wright@example.com', role: 'Member', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400' };
-      setUser(memberUser);
-      toast.success('Switched to Member Role');
+  const switchRole = async (newRole) => {
+    try {
+      if (newRole === 'Admin') {
+        await login('admin@gmail.com', 'Admin@123', 'Admin');
+      } else if (newRole === 'Trainer') {
+        await login('trainer1@gymnex.com', '123456', 'Trainer');
+      } else {
+        setRole(newRole);
+        const memberUser = { id: 'mem-101', name: 'Alexander Wright', email: 'alex.wright@example.com', role: 'Member', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400' };
+        setUser(memberUser);
+        toast.success('Switched to Member Role');
+      }
+    } catch (e) {
+      setRole(newRole);
     }
   };
 

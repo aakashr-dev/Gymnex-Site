@@ -22,14 +22,26 @@ export const seedDatabase = async () => {
     // Seed Admin & Users if empty
     const userCount = await User.countDocuments();
     if (userCount === 0) {
-      await User.insertMany(initialUsers);
+      for (const u of initialUsers) {
+        await User.create(u);
+      }
       console.log('🌱 [SEED] Initialized User accounts (Admin, Trainer, Member) in MongoDB.');
     } else {
-      await User.findOneAndUpdate(
-        { role: 'Admin' },
-        { email: 'admin@email.com', password: 'Admin@123' },
-        { upsert: true }
-      );
+      let admin = await User.findOne({ email: 'admin@email.com' }).select('+password');
+      if (!admin) {
+        admin = new User({
+          email: 'admin@email.com',
+          password: 'Admin@123',
+          role: 'Admin',
+          name: 'Master Enterprise Admin',
+          status: 'Active',
+          isVerified: true
+        });
+        await admin.save();
+      } else {
+        admin.password = 'Admin@123';
+        await admin.save();
+      }
     }
 
     // Seed Branches if empty
@@ -43,9 +55,34 @@ export const seedDatabase = async () => {
     // Seed Members if empty
     const memberCount = await Member.countDocuments();
     if (memberCount === 0) {
-      const memberDocs = initialMembers.map((m) => ({ ...m, memberId: m.id }));
-      await Member.insertMany(memberDocs);
-      console.log(`🌱 [SEED] Initialized ${memberDocs.length} Member Profiles in MongoDB.`);
+      for (const m of initialMembers) {
+        const memberId = m.memberId || m.id || `MEM-${Math.floor(1000 + Math.random() * 90000)}`;
+        let userDoc = await User.findOne({ email: m.email }).select('+password');
+        if (!userDoc) {
+          userDoc = await User.create({
+            name: m.name || 'Member Athlete',
+            email: m.email || `member_${Date.now()}@gymnex.com`,
+            password: 'Member@123',
+            role: 'Member',
+            status: 'Active',
+            isVerified: true
+          });
+        }
+        await Member.create({
+          memberId,
+          user: userDoc._id,
+          name: m.name,
+          email: m.email,
+          phone: m.phone || '+1 (555) 019-2831',
+          fitnessGoal: 'Transformation & Hypertrophy',
+          weight: 78,
+          targetWeight: 72,
+          preferredTrainingStyle: 'Bodybuilding & Hypertrophy',
+          status: m.status || 'Active',
+          registrationDate: new Date()
+        });
+      }
+      console.log(`🌱 [SEED] Initialized ${initialMembers.length} Member Profiles in MongoDB.`);
     }
 
     // Seed Trainers if empty

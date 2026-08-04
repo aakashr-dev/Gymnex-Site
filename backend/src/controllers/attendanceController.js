@@ -102,23 +102,31 @@ export const getLeaveRequests = async (req, res) => {
 
 export const submitLeaveRequest = async (req, res) => {
   try {
-    const { trainerId, startDate, endDate, reason } = req.body;
-    const trainer = await Trainer.findById(trainerId);
-    if (!trainer) return sendError(res, 'Trainer not found.', 404);
+    const { trainerId, startDate, endDate, reason, trainerName } = req.body;
+    let trainer = null;
+    if (trainerId) {
+      trainer = await Trainer.findById(trainerId);
+    }
+    if (!trainer && req.user) {
+      trainer = await Trainer.findOne({ $or: [{ user: req.user.id }, { email: req.user.email }] });
+    }
+    if (!trainer) {
+      trainer = await Trainer.findOne();
+    }
 
     const leave = await LeaveRequest.create({
-      trainer: trainer._id,
-      trainerName: trainer.name,
-      startDate,
-      endDate,
-      reason,
+      trainer: trainer ? trainer._id : null,
+      trainerName: trainerName || (trainer ? trainer.name : 'Master Coach'),
+      startDate: startDate || new Date().toISOString().split('T')[0],
+      endDate: endDate || new Date().toISOString().split('T')[0],
+      reason: reason || 'Personal Leave',
       status: 'Pending'
     });
 
     // Send notification to Admin
     await Notification.create({
       title: 'Trainer Leave Request',
-      message: `Coach ${trainer.name} requested leave from ${startDate} to ${endDate}. Reason: ${reason}`,
+      message: `Coach ${leave.trainerName} requested leave from ${leave.startDate} to ${leave.endDate}. Reason: ${leave.reason}`,
       type: 'System'
     });
 

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const memberSchema = new mongoose.Schema(
   {
@@ -6,6 +7,7 @@ const memberSchema = new mongoose.Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, default: '' },
     email: { type: String, default: '' },
+    password: { type: String, default: '', select: false },
     phone: { type: String, default: '' },
     branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch' },
     membership: { type: mongoose.Schema.Types.ObjectId, ref: 'Membership' },
@@ -29,6 +31,13 @@ const memberSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+memberSchema.pre('save', async function () {
+  if (!this.isModified('password') || !this.password) return;
+  if (this.password.startsWith('$2a$') || this.password.startsWith('$2b$')) return;
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 // Virtual property aliases for full backward compatibility
 memberSchema.virtual('currentWeight').get(function() { return this.weight; }).set(function(v) { this.weight = v; });

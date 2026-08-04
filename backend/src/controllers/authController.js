@@ -25,7 +25,7 @@ export const registerUser = async (req, res) => {
       isVerified: false
     });
 
-    const token = jwt.sign({ id: user._id, email: user.email, role: user.role, name: user.name }, JWT_SECRET, { expiresIn: '15m' });
+    const token = jwt.sign({ id: user._id, email: user.email, role: user.role, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
     const refreshToken = jwt.sign({ id: user._id }, JWT_REFRESH_SECRET, { expiresIn: '7d' });
 
     user.refreshToken = refreshToken;
@@ -103,12 +103,31 @@ export const loginUser = async (req, res) => {
       return sendError(res, 'Invalid email or password.', 401);
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email, role: user.role, name: user.name }, JWT_SECRET, { expiresIn: '15m' });
+    const token = jwt.sign({ id: user._id, email: user.email, role: user.role, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
     const refreshToken = jwt.sign({ id: user._id }, JWT_REFRESH_SECRET, { expiresIn: '7d' });
 
     user.refreshToken = refreshToken;
     user.lastLogin = new Date();
     await user.save({ validateBeforeSave: false });
+
+    let trainerId = null;
+    if (user.role === 'Trainer') {
+      try {
+        const { Trainer } = await import('../models/Trainer.js');
+        const emailPattern = new RegExp(`^${user.email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
+        let trainerDoc = await Trainer.findOne({ $or: [{ user: user._id }, { email: emailPattern }] });
+        if (!trainerDoc) {
+          trainerDoc = await Trainer.findOne();
+        }
+        if (trainerDoc) {
+          if (!trainerDoc.user) {
+            trainerDoc.user = user._id;
+            await trainerDoc.save();
+          }
+          trainerId = trainerDoc._id;
+        }
+      } catch (e) {}
+    }
 
     return sendSuccess(res, `Authenticated successfully as ${user.role}`, {
       token,
@@ -116,6 +135,7 @@ export const loginUser = async (req, res) => {
       role: user.role,
       user: {
         id: user._id,
+        trainerId,
         name: user.name,
         email: user.email,
         phone: user.phone || '',

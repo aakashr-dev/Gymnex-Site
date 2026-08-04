@@ -68,21 +68,20 @@ export const MemberOverview = () => {
             </Button>
           </Card>
 
-          {/* Next Class & Quick Actions */}
+          {/* Quick Shortcuts */}
           <Card className="space-y-4">
-            <h3 className="text-lg font-bold text-white font-display uppercase">Next Booked Class</h3>
-            <div className="p-4 rounded-xl bg-crimson-500/10 border border-crimson-500/30 space-y-2">
-              <Badge variant="crimson">Spin Velocity</Badge>
-              <h4 className="font-bold text-white font-display uppercase text-sm">CRIMSON VELOCITY SPIN</h4>
-              <p className="text-xs text-gray-300">Tomorrow @ 07:00 AM</p>
-              <p className="text-[10px] text-gray-400">Cycle Theater Studio A</p>
+            <h3 className="text-lg font-bold text-white font-display uppercase">Quick Shortcuts</h3>
+            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2">
+              <Badge variant="amber">VIP ACTIVE PASS</Badge>
+              <h4 className="font-bold text-white font-display uppercase text-sm">{member.plan}</h4>
+              <p className="text-xs text-gray-300">Personalized Training & Nutrition</p>
             </div>
             <div className="space-y-2">
-              <Button variant="dark" size="sm" onClick={() => navigate('/member/classes')} className="w-full">
-                Book Next Class
+              <Button variant="dark" size="sm" onClick={() => navigate('/member/workouts')} className="w-full">
+                My Prescribed Workouts
               </Button>
               <Button variant="dark" size="sm" onClick={() => navigate('/member/diet')} className="w-full">
-                View Diet Plan
+                My Nutrition & Diet Plan
               </Button>
             </div>
           </Card>

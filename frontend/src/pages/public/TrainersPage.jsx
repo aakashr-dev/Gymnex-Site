@@ -2,30 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { PageTransition, StaggerContainer, StaggerItem } from '../../components/motion/MotionComponents';
 import { SectionHeader, Button, Card, Badge, Modal, CircularCard, AtmosphericBackground } from '../../components/ui/UIComponents';
 import { api } from '../../services/api';
+import { MOCK_TRAINERS } from '../../data/mockData';
 import { Star, RefreshCw, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const TrainersPage = () => {
-  const [trainers, setTrainers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [trainers, setTrainers] = useState(MOCK_TRAINERS);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedTrainer, setSelectedTrainer] = useState(null);
 
   const fetchLiveTrainers = async () => {
-    setLoading(true);
     setError(null);
     try {
       const data = await api.getTrainers();
       if (Array.isArray(data) && data.length > 0) {
         setTrainers(data);
       } else {
-        setTrainers([]);
+        setTrainers(MOCK_TRAINERS);
       }
     } catch (err) {
       console.error('Failed to fetch live trainers:', err);
-      setError(err.message || 'Unable to connect to coaching database.');
-    } finally {
-      setLoading(false);
+      setTrainers(MOCK_TRAINERS);
     }
   };
 

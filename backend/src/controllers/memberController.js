@@ -8,7 +8,8 @@ import { sendSuccess, sendError, sendPaginated } from '../utils/apiResponse.js';
 export const getAllMembers = async (req, res) => {
   try {
     const totalDocs = await Member.countDocuments();
-    const features = new APIFeatures(Member.find().populate('user branch membership personalTrainer assignedTrainer'), req.query)
+    const queryParams = { limit: 1000, ...req.query };
+    const features = new APIFeatures(Member.find().populate('user branch membership personalTrainer assignedTrainer'), queryParams)
       .filter()
       .search(['name', 'email', 'memberId', 'status', 'fitnessGoal'])
       .sort('-createdAt')
@@ -16,7 +17,7 @@ export const getAllMembers = async (req, res) => {
       .paginate();
 
     const members = await features.query;
-    return sendPaginated(res, 'Members fetched successfully.', members, req.query.page || 1, req.query.limit || 100, totalDocs);
+    return sendPaginated(res, 'Members fetched successfully.', members, queryParams.page || 1, queryParams.limit || 1000, totalDocs);
   } catch (err) {
     return sendError(res, err.message, 500);
   }
@@ -89,27 +90,32 @@ export const createMember = async (req, res) => {
       await userDoc.save();
     }
 
-    const member = await Member.create({
+    let member = await Member.create({
       memberId: `MEM-${Math.floor(1000 + Math.random() * 90000)}`,
       user: userDoc._id,
       name: name || 'New Member',
       email: normalizedEmail,
+      password: targetPassword,
       phone: phone || '',
       branch: branch || null,
       membership: membership || null,
+      personalTrainer: req.body.personalTrainer || req.body.trainerId || null,
+      assignedTrainer: req.body.assignedTrainer || req.body.trainerId || null,
+      assignmentStatus: (req.body.personalTrainer || req.body.trainerId) ? 'Assigned' : 'Pending Assignment',
       fitnessGoal: fitnessGoal || 'General Fitness',
       weight: Number(currentWeight || req.body.weight) || 75,
       targetWeight: Number(targetWeight) || 70,
       preferredTrainingStyle: preferredTrainingStyle || 'General Fitness',
       medicalNotes: medicalInformation || req.body.medicalNotes || 'None',
-      assignmentStatus: 'Pending Assignment',
       status: 'Active',
       registrationDate: new Date()
     });
 
+    member = await Member.findById(member._id).populate('user branch membership personalTrainer assignedTrainer');
+
     await Notification.create({
       title: 'New Member Registered',
-      message: `Member ${member.name} (${member.fitnessGoal}) was registered and is waiting for trainer assignment.`,
+      message: `Member ${member.name} (${member.fitnessGoal}) was registered successfully.`,
       type: 'System'
     });
 
@@ -177,6 +183,21 @@ export const updateMember = async (req, res) => {
   try {
     const member = await Member.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!member) return sendError(res, 'Member not found.', 404);
+
+    if (req.body.password && String(req.body.password).trim()) {
+      const newPass = String(req.body.password).trim();
+      member.password = newPass;
+      await member.save();
+
+      if (member.user) {
+        const userDoc = await User.findById(member.user).select('+password');
+        if (userDoc) {
+          userDoc.password = newPass;
+          await userDoc.save();
+        }
+      }
+    }
+
     return sendSuccess(res, 'Member updated successfully.', member);
   } catch (err) {
     return sendError(res, err.message, 400);

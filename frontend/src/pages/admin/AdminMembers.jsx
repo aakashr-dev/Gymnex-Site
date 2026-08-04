@@ -14,6 +14,7 @@ import {
   RefreshCw,
   X
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export const AdminMembers = () => {
   const location = useLocation();
@@ -70,10 +71,52 @@ export const AdminMembers = () => {
           setNewMember((prev) => ({ ...prev, membership: plansData[0]._id || plansData[0].id }));
         }
       }
+      return true;
     } catch (err) {
-      console.error('Error loading members data:', err);
+      console.error('Error loading members data from MongoDB:', err);
+      return false;
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleManualRefresh = async () => {
+    setLoading(true);
+    try {
+      const [membersData, trainersData, plansData] = await Promise.all([
+        api.getMembers(),
+        api.getTrainers(),
+        api.getMemberships()
+      ]);
+      if (Array.isArray(membersData)) setMembers(membersData);
+      if (Array.isArray(trainersData)) setTrainers(trainersData);
+      if (Array.isArray(plansData)) setMemberships(plansData);
+      toast.success('Member roster refreshed!');
+    } catch (err) {
+      console.error('Manual refresh error:', err);
+      toast.error('Failed to refresh member data.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQuickAssignTrainer = async (member, newTrainerId) => {
+    if (!member) return;
+    if (!newTrainerId) return;
+
+    try {
+      const res = await api.assignTrainer(member._id || member.id, newTrainerId);
+      if (res.success || res.data) {
+        const assignedTrainerObj = trainers.find((t) => (t._id || t.id) === newTrainerId);
+        const trainerName = assignedTrainerObj ? assignedTrainerObj.name : 'Coach';
+        toast.success(`Assigned ${trainerName} to ${member.name}!`);
+        await loadData();
+      } else {
+        toast.error(res.message || 'Failed to assign trainer.');
+      }
+    } catch (err) {
+      console.error('Quick assign error:', err);
+      toast.error('Failed to assign trainer.');
     }
   };
 
@@ -135,9 +178,11 @@ export const AdminMembers = () => {
       await api.assignTrainer(selectedMember._id || selectedMember.id, selectedTrainerId);
       setIsAssignModalOpen(false);
       setSelectedMember(null);
-      loadData();
+      await loadData();
+      toast.success('Trainer assigned successfully!');
     } catch (err) {
       console.error('Assign error:', err);
+      toast.error('Failed to assign trainer.');
     } finally {
       setAssigning(false);
     }
@@ -149,18 +194,31 @@ export const AdminMembers = () => {
 
     setSubmitting(true);
     try {
-      const res = await api.createMember(newMember);
+      const payload = {
+        ...newMember,
+        personalTrainer: newMember.trainerId || null,
+        assignedTrainer: newMember.trainerId || null
+      };
+      const res = await api.createMember(payload);
       const createdMember = res.data || res;
       const memberId = createdMember._id || createdMember.id;
+
+      if (createdMember && memberId) {
+        setMembers((prev) => [createdMember, ...prev.filter((m) => (m._id || m.id) !== memberId)]);
+      }
 
       if (newMember.trainerId && memberId) {
         await api.assignTrainer(memberId, newMember.trainerId);
       }
 
+      setSearchQuery('');
+      setStatusFilter('All');
+      setAssignmentFilter('All');
       setIsAddModalOpen(false);
       setNewMember({
         name: '',
         email: '',
+        password: '',
         phone: '',
         membership: memberships.length > 0 ? (memberships[0]._id || memberships[0].id) : '',
         trainerId: '',
@@ -170,9 +228,11 @@ export const AdminMembers = () => {
         preferredTrainingStyle: 'HIIT & Cardio',
         medicalInformation: 'None'
       });
-      loadData();
+      await loadData();
+      toast.success(`Registered ${newMember.name || 'Member'} successfully!`);
     } catch (err) {
       console.error('Create member error:', err);
+      toast.error('Failed to create member.');
     } finally {
       setSubmitting(false);
     }
@@ -201,7 +261,7 @@ export const AdminMembers = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button variant="glass" size="sm" onClick={loadData} icon={RefreshCw} className={`text-xs ${loading ? 'animate-spin' : ''}`}>
+            <Button variant="glass" size="sm" onClick={handleManualRefresh} icon={RefreshCw} className="text-xs">
               Refresh
             </Button>
             <Button
@@ -339,19 +399,26 @@ export const AdminMembers = () => {
                         </td>
 
                         <td className="py-3.5 px-3">
-                          {trainerObj ? (
-                            <span className="font-bold text-white flex items-center gap-1">
-                              <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
-                              {trainerObj.name}
-                            </span>
-                          ) : (
-                            <button
-                              onClick={() => handleOpenAssignModal(m)}
-                              className="px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 font-bold text-[10px] uppercase transition-all"
+                          <div className="flex items-center gap-2">
+                            <select
+                              value={
+                                typeof (m.personalTrainer || m.assignedTrainer) === 'object'
+                                  ? (m.personalTrainer?._id || m.assignedTrainer?._id || m.personalTrainer?.id || m.assignedTrainer?.id || '')
+                                  : (m.personalTrainer || m.assignedTrainer || '')
+                              }
+                              onChange={(e) => handleQuickAssignTrainer(m, e.target.value)}
+                              className="bg-dark-surface border border-amber-500/40 text-amber-400 font-extrabold text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-amber-400 cursor-pointer shadow-sm min-w-[160px]"
                             >
-                              + Assign Trainer
-                            </button>
-                          )}
+                              <option value="" className="bg-dark-card text-gray-400 font-semibold">
+                                -- Assign Coach --
+                              </option>
+                              {trainers.map((t) => (
+                                <option key={t._id || t.id} value={t._id || t.id} className="bg-dark-card text-white font-semibold">
+                                  {t.name} ({t.specialization || 'Coach'})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
                         </td>
 
                         <td className="py-3.5 px-3">

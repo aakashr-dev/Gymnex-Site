@@ -41,10 +41,9 @@ import { AdminSettings } from '../pages/admin/AdminSettings';
 import { TrainerOverview } from '../pages/trainer/TrainerOverview';
 import { TrainerClients } from '../pages/trainer/TrainerClients';
 import { TrainerWorkoutBuilder } from '../pages/trainer/TrainerWorkoutBuilder';
-import { TrainerNutritionPlanner } from '../pages/trainer/TrainerNutritionPlanner';
-import { TrainerClassSchedule } from '../pages/trainer/TrainerClassSchedule';
+import { TrainerEquipment } from '../pages/trainer/TrainerEquipment';
+import { TrainerLeave } from '../pages/trainer/TrainerLeave';
 import { TrainerAttendance } from '../pages/trainer/TrainerAttendance';
-import { TrainerProgress } from '../pages/trainer/TrainerProgress';
 import { TrainerNotifications } from '../pages/trainer/TrainerNotifications';
 import { TrainerProfile } from '../pages/trainer/TrainerProfile';
 
@@ -111,10 +110,9 @@ export const AppRoutes = () => {
         <Route index element={<TrainerOverview />} />
         <Route path="clients" element={<TrainerClients />} />
         <Route path="workout-builder" element={<TrainerWorkoutBuilder />} />
-        <Route path="nutrition-planner" element={<TrainerNutritionPlanner />} />
-        <Route path="class-schedule" element={<TrainerClassSchedule />} />
+        <Route path="equipment" element={<TrainerEquipment />} />
+        <Route path="leave" element={<TrainerLeave />} />
         <Route path="attendance" element={<TrainerAttendance />} />
-        <Route path="progress" element={<TrainerProgress />} />
         <Route path="notifications" element={<TrainerNotifications />} />
         <Route path="profile" element={<TrainerProfile />} />
       </Route>
@@ -125,9 +123,9 @@ export const AppRoutes = () => {
         <Route path="memberships" element={<MemberMemberships />} />
         <Route path="workouts" element={<MemberWorkouts />} />
         <Route path="diet" element={<MemberDiet />} />
-        <Route path="classes" element={<MemberClasses />} />
-        <Route path="attendance" element={<MemberAttendance />} />
-        <Route path="payments" element={<MemberPayments />} />
+        <Route path="classes" element={<Navigate to="/member" replace />} />
+        <Route path="attendance" element={<Navigate to="/member" replace />} />
+        <Route path="payments" element={<Navigate to="/member" replace />} />
         <Route path="progress" element={<MemberProgress />} />
         <Route path="notifications" element={<MemberNotifications />} />
         <Route path="profile" element={<MemberProfile />} />

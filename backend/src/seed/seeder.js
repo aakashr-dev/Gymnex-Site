@@ -161,49 +161,8 @@ const seedData = async () => {
     const createdTrainers = await Trainer.insertMany(trainersData);
     console.log(`✅ Seeded ${createdTrainers.length} Master Trainers.`);
 
-    // 5. Seed 100 Members (with 20 unassigned members)
-    const membersData = [];
-    for (let i = 1; i <= 100; i++) {
-      const isUnassigned = i <= 20;
-      const fitnessGoal = FITNESS_GOALS[i % FITNESS_GOALS.length];
-      const preferredStyle = TRAINING_STYLES[i % TRAINING_STYLES.length];
-      const assignedTrainerDoc = isUnassigned ? null : createdTrainers[i % createdTrainers.length]._id;
-
-      const userDoc = await User.create({
-        name: `Athlete Member ${i}`,
-        email: `member${i}@gymnex.com`,
-        password: 'Member@123',
-        role: 'Member',
-        status: i % 15 === 0 ? 'Suspended' : 'Active',
-        isVerified: true
-      });
-
-      membersData.push({
-        memberId: `MEM-${1000 + i}`,
-        user: userDoc._id,
-        name: `Athlete Member ${i}`,
-        email: `member${i}@gymnex.com`,
-        phone: `+1 (555) 012-${1000 + i}`,
-        branch: createdBranches[i % createdBranches.length]._id,
-        membership: createdPlans[i % createdPlans.length]._id,
-        personalTrainer: assignedTrainerDoc,
-        assignedTrainer: assignedTrainerDoc,
-        assignmentStatus: isUnassigned ? 'Pending Assignment' : 'Assigned',
-        weight: 70 + (i % 25),
-        targetWeight: 68 + (i % 20),
-        preferredTrainingStyle: preferredStyle,
-        medicalNotes: i % 7 === 0 ? 'Mild lower back sensitivity' : 'None reported',
-        attendance: 12 + (i % 40),
-        height: 165 + (i % 25),
-        weight: 60 + (i % 35),
-        BMI: Number((21 + (i % 7) * 0.8).toFixed(1)),
-        visitStreak: (i % 15) + 1,
-        registrationDate: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)),
-        status: i % 25 === 0 ? 'Suspended' : i % 30 === 0 ? 'Deactivated' : 'Active'
-      });
-    }
-    const createdMembers = await Member.insertMany(membersData);
-    console.log(`✅ Seeded ${createdMembers.length} Members (${createdMembers.filter(m => m.assignmentStatus === 'Pending Assignment').length} waiting for trainer assignment).`);
+    // Members: Left empty for clean real database registration
+    console.log(`✅ Member collection left clean for real user registrations.`);
 
     // 6. Seed Trainer Leave Requests
     const leaveRequestsData = [

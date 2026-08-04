@@ -12,7 +12,7 @@ export const HomePage = () => {
   const navigate = useNavigate();
   const [is360ModalOpen, setIs360ModalOpen] = useState(false);
   const [introDone, setIntroDone] = useState(() => !!window.__introDone);
-  const [trainers, setTrainers] = useState([]);
+  const [trainers, setTrainers] = useState(MOCK_TRAINERS.slice(0, 3));
 
   useEffect(() => {
     if (window.__introDone) {
@@ -26,9 +26,14 @@ export const HomePage = () => {
     const fetchLiveTrainers = async () => {
       try {
         const data = await api.getTrainers();
-        if (Array.isArray(data) && data.length > 0) setTrainers(data.slice(0, 3));
+        if (Array.isArray(data) && data.length > 0) {
+          setTrainers(data.slice(0, 3));
+        } else {
+          setTrainers(MOCK_TRAINERS.slice(0, 3));
+        }
       } catch (err) {
         console.error('Failed to load live trainers for home page:', err);
+        setTrainers(MOCK_TRAINERS.slice(0, 3));
       }
     };
     fetchLiveTrainers();
@@ -212,9 +217,9 @@ export const HomePage = () => {
             {trainers.map((trainer) => (
               <StaggerItem key={trainer._id || trainer.id || trainer.trainerId}>
                 <CircularCard
-                  image={trainer.photo || trainer.avatar}
+                  image={trainer.photo || trainer.avatar || trainer.profileImage || 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&q=80&w=600'}
                   title={trainer.name}
-                  subtitle={trainer.role || trainer.specialization || trainer.specialty}
+                  subtitle={trainer.role || trainer.specialization || trainer.specialty || 'Master Coach'}
                   description={trainer.bio || `${trainer.experience || '5+ Years'} Experience Specialist`}
                   onClick={() => navigate('/trainers')}
                 />

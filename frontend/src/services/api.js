@@ -8,6 +8,11 @@ const getAuthHeaders = () => {
   };
 };
 
+const handleAuthFailure = () => {
+  localStorage.removeItem('gymnex_jwt_token');
+  localStorage.removeItem('gymnex_user');
+};
+
 export const api = {
   // Auth API
   async login(email, password, role) {
@@ -99,10 +104,15 @@ export const api = {
   // Members API & Workflow
   async getMembers(params = {}) {
     try {
-      const query = new URLSearchParams(params).toString();
+      const defaultParams = { limit: 1000, ...params };
+      const query = new URLSearchParams(defaultParams).toString();
       const res = await fetch(`${API_BASE_URL}/members?${query}`, {
         headers: getAuthHeaders()
       });
+      if (res.status === 401) {
+        handleAuthFailure();
+        return [];
+      }
       const data = await res.json();
       if (data.success && Array.isArray(data.data)) return data.data;
       return [];
@@ -191,19 +201,39 @@ export const api = {
   },
 
   // Trainers API & Workflow
+  async getMyTrainerProfile() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/trainers/me/profile`, {
+        headers: getAuthHeaders()
+      });
+      if (!res.ok) {
+        console.error('Fetch my trainer profile error:', res.status, res.statusText);
+        return null;
+      }
+      const data = await res.json();
+      if (data.success && data.data) return data.data;
+      return null;
+    } catch (err) {
+      console.error('Fetch my trainer profile exception:', err);
+      return null;
+    }
+  },
+
   async getTrainers(params = {}) {
     try {
       const defaultParams = { limit: 100, ...params };
       const query = new URLSearchParams(defaultParams).toString();
-      const res = await fetch(`${API_BASE_URL}/trainers?${query}`);
+      const res = await fetch(`${API_BASE_URL}/trainers?${query}`, {
+        headers: getAuthHeaders()
+      });
       if (!res.ok) {
-        const errorText = await res.text();
-        console.error('Fetch trainers API HTTP error:', { status: res.status, statusText: res.statusText, body: errorText });
+        if (res.status === 401) {
+          handleAuthFailure();
+        }
         return [];
       }
       const data = await res.json();
       if (data.success && Array.isArray(data.data)) return data.data;
-      console.error('Fetch trainers API returned unexpected payload structure:', data);
       return [];
     } catch (err) {
       console.error('Fetch trainers API network error:', err);

@@ -166,7 +166,7 @@ export const AdminOverview = () => {
               size="sm"
               onClick={fetchDashboardData}
               icon={RefreshCw}
-              className={`text-xs ${loading ? 'animate-spin' : ''}`}
+              className="text-xs"
             >
               Sync Telemetry
             </Button>
