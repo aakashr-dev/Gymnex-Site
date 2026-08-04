@@ -86,6 +86,11 @@ const startServer = async () => {
   const isConnected = await connectDB();
   if (isConnected) {
     await seedDatabase();
+    try {
+      const { Trainer } = await import('./models/Trainer.js');
+      const trainerCount = await Trainer.countDocuments();
+      console.log(`🏋️  [DATABASE TELEMETRY] Active Master Trainers in DB: ${trainerCount}`);
+    } catch (e) {}
   }
 
   const server = app.listen(PORT, () => {

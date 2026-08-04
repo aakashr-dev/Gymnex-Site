@@ -34,6 +34,7 @@ export const AdminTrainers = () => {
   const [trainerForm, setTrainerForm] = useState({
     name: '',
     email: '',
+    password: '',
     phone: '',
     specialization: 'Strength Coach',
     experience: '5+ Years',
@@ -65,6 +66,7 @@ export const AdminTrainers = () => {
       setTrainerForm({
         name: '',
         email: '',
+        password: '',
         phone: '',
         specialization: 'Strength Coach',
         experience: '5+ Years',
@@ -215,7 +217,21 @@ export const AdminTrainers = () => {
           </div>
 
           {/* Trainer Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
+          {loading ? (
+            <div className="py-16 text-center space-y-3">
+              <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto" />
+              <p className="text-xs text-gray-400 font-mono uppercase tracking-widest">Syncing Master Trainer Roster from Backend...</p>
+            </div>
+          ) : filteredTrainers.length === 0 ? (
+            <div className="py-16 text-center bg-white/5 border border-white/10 rounded-2xl p-8 space-y-3">
+              <p className="text-sm font-bold text-gray-300 uppercase">No Master Trainers Found</p>
+              <p className="text-xs text-gray-400">No trainer records match your filter criteria or network response was empty.</p>
+              <Button variant="glass" size="sm" onClick={loadTrainers} icon={RefreshCw} className="text-xs mx-auto">
+                Reload Staff Roster
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
             {filteredTrainers.map((t) => (
               <div
                 key={t._id || t.id || t.trainerId}
@@ -292,6 +308,7 @@ export const AdminTrainers = () => {
               </div>
             ))}
           </div>
+          )}
         </Card>
 
         {/* ADD TRAINER MODAL */}
@@ -325,6 +342,17 @@ export const AdminTrainers = () => {
                     onChange={(e) => setTrainerForm({ ...trainerForm, email: e.target.value })}
                     placeholder="coach@gymnex.com"
                     className="w-full px-3 py-2 bg-dark-surface border border-white/15 rounded-xl text-white focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-bold text-amber-400 uppercase block mb-1">Account Password</label>
+                  <input
+                    type="password"
+                    value={trainerForm.password}
+                    onChange={(e) => setTrainerForm({ ...trainerForm, password: e.target.value })}
+                    placeholder="Default: 123456"
+                    className="w-full px-3 py-2 bg-dark-surface border border-amber-500/30 rounded-xl text-white focus:outline-none focus:border-amber-500 placeholder-amber-400/50"
                   />
                 </div>
 

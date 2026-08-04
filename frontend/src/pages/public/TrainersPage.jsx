@@ -1,26 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { PageTransition, StaggerContainer, StaggerItem } from '../../components/motion/MotionComponents';
 import { SectionHeader, Button, Card, Badge, Modal, CircularCard, AtmosphericBackground } from '../../components/ui/UIComponents';
-import { MOCK_TRAINERS } from '../../data/mockData';
 import { api } from '../../services/api';
-import { Star } from 'lucide-react';
+import { Star, RefreshCw, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const TrainersPage = () => {
   const [trainers, setTrainers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedTrainer, setSelectedTrainer] = useState(null);
 
-  useEffect(() => {
-    const fetchLiveTrainers = async () => {
-      try {
-        const data = await api.getTrainers();
-        if (Array.isArray(data) && data.length > 0) {
-          setTrainers(data);
-        }
-      } catch (err) {
-        console.error('Failed to fetch live trainers:', err);
+  const fetchLiveTrainers = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await api.getTrainers();
+      if (Array.isArray(data) && data.length > 0) {
+        setTrainers(data);
+      } else {
+        setTrainers([]);
       }
-    };
+    } catch (err) {
+      console.error('Failed to fetch live trainers:', err);
+      setError(err.message || 'Unable to connect to coaching database.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchLiveTrainers();
   }, []);
 
@@ -40,68 +49,74 @@ export const TrainersPage = () => {
             subtitle="Former Olympic weightlifting practitioners, biomechanical scientists, and elite physique specialists."
           />
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {trainers.map((trainer) => (
-              <StaggerItem key={trainer._id || trainer.id || trainer.trainerId}>
-                <Card className="flex flex-col justify-between h-full text-center space-y-6">
-                  <CircularCard
-                    image={trainer.photo || trainer.avatar}
-                    title={trainer.name}
-                    subtitle={trainer.role || trainer.specialization || trainer.specialty}
-                    description={trainer.bio || `${trainer.experience} Experience Specialist`}
-                  />
-                  <div className="pt-2 border-t border-white/10">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="w-full"
-                      onClick={() => setSelectedTrainer(trainer)}
-                    >
-                      Book 1-on-1 Session
-                    </Button>
-                  </div>
-                </Card>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
+          {loading ? (
+            <div className="py-20 text-center space-y-3">
+              <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto" />
+              <p className="text-xs text-gray-400 font-mono uppercase tracking-widest">Loading Master Coaching Faculty...</p>
+            </div>
+          ) : trainers.length === 0 ? (
+            <div className="py-16 text-center bg-dark-card border border-white/10 rounded-3xl max-w-md mx-auto p-8 space-y-4">
+              <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-bold text-white uppercase font-display">Coaching Roster Temporarily Unavailable</p>
+                <p className="text-xs text-gray-400">
+                  {error || 'No active master trainers returned from backend API.'}
+                </p>
+              </div>
+              <Button variant="glass" size="sm" onClick={fetchLiveTrainers} icon={RefreshCw} className="text-xs mx-auto">
+                Retry Network Connection
+              </Button>
+            </div>
+          ) : (
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              {trainers.map((trainer) => (
+                <StaggerItem key={trainer._id || trainer.id || trainer.trainerId}>
+                  <Card className="flex flex-col justify-between h-full text-center space-y-6">
+                    <CircularCard
+                      image={trainer.photo || trainer.avatar}
+                      title={trainer.name}
+                      subtitle={trainer.role || trainer.specialization || trainer.specialty}
+                      description={trainer.bio || `${trainer.experience || '5+ Years'} Experience Specialist`}
+                    />
+                    <div className="pt-2 border-t border-white/10">
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        className="w-full bg-amber-500 text-black hover:bg-amber-400 font-extrabold text-xs"
+                        onClick={() => setSelectedTrainer(trainer)}
+                      >
+                        Book 1-on-1 Session
+                      </Button>
+                    </div>
+                  </Card>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          )}
         </div>
 
-        {/* Booking Consultation Modal */}
-        <Modal
-          isOpen={!!selectedTrainer}
-          onClose={() => setSelectedTrainer(null)}
-          title={`Book Coaching Session: ${selectedTrainer?.name}`}
-        >
-          {selectedTrainer && (
-            <div className="space-y-4 text-sm text-gray-300">
-              <div className="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/10">
-                <img src={selectedTrainer.avatar} alt={selectedTrainer.name} className="w-12 h-12 rounded-full object-cover" />
-                <div>
-                  <h4 className="font-bold text-white font-display uppercase">{selectedTrainer.name}</h4>
-                  <p className="text-xs text-crimson-500">{selectedTrainer.specialty}</p>
-                </div>
+        {/* BOOK SESSION MODAL */}
+        {selectedTrainer && (
+          <Modal
+            isOpen={!!selectedTrainer}
+            onClose={() => setSelectedTrainer(null)}
+            title={`Book Consultation: ${selectedTrainer.name}`}
+          >
+            <div className="space-y-4 text-xs">
+              <div className="p-4 rounded-xl bg-white/5 space-y-1">
+                <p><strong className="text-gray-300">Specialization:</strong> {selectedTrainer.specialization}</p>
+                <p><strong className="text-gray-300">Experience:</strong> {selectedTrainer.experience}</p>
+                <p><strong className="text-gray-300">Rating:</strong> ⭐ {selectedTrainer.rating || 4.9} / 5.0</p>
               </div>
-              <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase text-gray-400">Select Date & Time</label>
-                <input
-                  type="datetime-local"
-                  className="w-full px-3 py-2 bg-dark-card border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-crimson-500"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase text-gray-400">Primary Athletic Goal</label>
-                <textarea
-                  rows={3}
-                  placeholder="Describe your current lifting stats and goals..."
-                  className="w-full px-3 py-2 bg-dark-card border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-crimson-500"
-                />
-              </div>
-              <Button variant="primary" size="md" className="w-full" onClick={handleBookSession}>
+              <p className="text-gray-400">Select your preferred date and time to reserve a private 1-on-1 biomechanical assessment.</p>
+              <Button variant="primary" size="md" className="w-full bg-amber-500 text-black hover:bg-amber-400 font-bold" onClick={handleBookSession}>
                 Confirm Reservation Request
               </Button>
             </div>
-          )}
-        </Modal>
+          </Modal>
+        )}
       </div>
     </PageTransition>
   );

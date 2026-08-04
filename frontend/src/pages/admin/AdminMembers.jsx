@@ -43,6 +43,7 @@ export const AdminMembers = () => {
   const [newMember, setNewMember] = useState({
     name: '',
     email: '',
+    password: '',
     phone: '',
     membership: '',
     trainerId: '',
@@ -454,19 +455,30 @@ export const AdminMembers = () => {
                   </div>
 
                   <div>
-                    <label className="font-bold text-gray-300 uppercase block mb-1">Membership Plan</label>
-                    <select
-                      value={newMember.membership}
-                      onChange={(e) => setNewMember({ ...newMember, membership: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-dark-surface border border-white/15 rounded-xl text-white focus:outline-none focus:border-amber-500"
-                    >
-                      {memberships.map((plan) => (
-                        <option key={plan._id || plan.id} value={plan._id || plan.id}>
-                          {plan.name} (${plan.price}/mo)
-                        </option>
-                      ))}
-                    </select>
+                    <label className="font-bold text-amber-400 uppercase block mb-1">Account Password</label>
+                    <input
+                      type="password"
+                      value={newMember.password}
+                      onChange={(e) => setNewMember({ ...newMember, password: e.target.value })}
+                      placeholder="Default: Member@123"
+                      className="w-full px-3.5 py-2.5 bg-dark-surface border border-amber-500/30 rounded-xl text-white focus:outline-none focus:border-amber-500 font-sans placeholder-amber-400/50"
+                    />
                   </div>
+                </div>
+
+                <div>
+                  <label className="font-bold text-gray-300 uppercase block mb-1">Membership Plan</label>
+                  <select
+                    value={newMember.membership}
+                    onChange={(e) => setNewMember({ ...newMember, membership: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-dark-surface border border-white/15 rounded-xl text-white focus:outline-none focus:border-amber-500"
+                  >
+                    {memberships.map((plan) => (
+                      <option key={plan._id || plan.id} value={plan._id || plan.id}>
+                        {plan.name} (${plan.price}/mo)
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>

@@ -52,6 +52,7 @@ export const createMember = async (req, res) => {
     const {
       name,
       email,
+      password,
       phone,
       branch,
       membership,
@@ -62,27 +63,37 @@ export const createMember = async (req, res) => {
       medicalInformation
     } = req.body;
 
-    let userDoc = null;
-    if (email) {
-      userDoc = await User.findOne({ email });
-      if (!userDoc) {
-        userDoc = await User.create({
-          name: name || 'New Member',
-          email,
-          phone: phone || '',
-          password: 'Member@123',
-          role: 'Member',
-          status: 'Active',
-          isVerified: true
-        });
-      }
+    const normalizedEmail = (email && email.trim()) 
+      ? email.trim().toLowerCase() 
+      : `member_${Date.now()}@gymnex.com`;
+
+    const targetPassword = (password && String(password).trim()) 
+      ? String(password).trim() 
+      : 'Member@123';
+
+    let userDoc = await User.findOne({ email: normalizedEmail }).select('+password');
+    if (!userDoc) {
+      userDoc = await User.create({
+        name: name || 'New Member',
+        email: normalizedEmail,
+        phone: phone || '',
+        password: targetPassword,
+        role: 'Member',
+        status: 'Active',
+        isVerified: true
+      });
+    } else {
+      userDoc.password = targetPassword;
+      userDoc.name = name || userDoc.name;
+      userDoc.role = 'Member';
+      await userDoc.save();
     }
 
     const member = await Member.create({
       memberId: `MEM-${Math.floor(1000 + Math.random() * 90000)}`,
-      user: userDoc ? userDoc._id : null,
+      user: userDoc._id,
       name: name || 'New Member',
-      email: email || '',
+      email: normalizedEmail,
       phone: phone || '',
       branch: branch || null,
       membership: membership || null,

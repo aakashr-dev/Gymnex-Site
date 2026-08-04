@@ -191,14 +191,22 @@ export const api = {
   },
 
   // Trainers API & Workflow
-  async getTrainers() {
+  async getTrainers(params = {}) {
     try {
-      const res = await fetch(`${API_BASE_URL}/trainers`);
+      const defaultParams = { limit: 100, ...params };
+      const query = new URLSearchParams(defaultParams).toString();
+      const res = await fetch(`${API_BASE_URL}/trainers?${query}`);
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Fetch trainers API HTTP error:', { status: res.status, statusText: res.statusText, body: errorText });
+        return [];
+      }
       const data = await res.json();
       if (data.success && Array.isArray(data.data)) return data.data;
+      console.error('Fetch trainers API returned unexpected payload structure:', data);
       return [];
     } catch (err) {
-      console.warn('Fetch trainers API failed:', err.message);
+      console.error('Fetch trainers API network error:', err);
       return [];
     }
   },
