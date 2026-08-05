@@ -3,10 +3,18 @@ import { api } from '../services/api';
 import { authService } from '../services/apiServices';
 import toast from 'react-hot-toast';
 
+import { getTrainerAvatar } from '../utils/trainerUtils';
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => authService.getCurrentUser());
+  const [user, setUser] = useState(() => {
+    const stored = authService.getCurrentUser();
+    if (stored && (stored.role === 'Trainer' || stored.name?.toLowerCase().includes('hari') || stored.name?.toLowerCase().includes('hemath') || stored.name?.toLowerCase().includes('logesh') || stored.name?.toLowerCase().includes('kumar') || stored.name?.toLowerCase().includes('lisa'))) {
+      stored.avatar = getTrainerAvatar(stored.name, stored.avatar, stored.photo || stored.profileImage);
+    }
+    return stored;
+  });
   const [role, setRole] = useState(user?.role || 'Admin');
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +30,10 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const res = await api.login(email, password, selectedRole);
-      const userData = res?.user || res?.data?.user || { name: 'Admin', email, role: selectedRole || 'Admin' };
+      let userData = res?.user || res?.data?.user || { name: 'Master Coach', email, role: selectedRole || 'Admin' };
+      if (selectedRole === 'Trainer' || userData.role === 'Trainer') {
+        userData.avatar = getTrainerAvatar(userData.name, userData.avatar, userData.photo || userData.profileImage);
+      }
       setUser(userData);
       setRole(userData.role || selectedRole || 'Admin');
       toast.success(`Welcome back, ${userData.name || 'User'}!`);

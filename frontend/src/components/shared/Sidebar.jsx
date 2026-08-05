@@ -22,6 +22,8 @@ import {
   Target
 } from 'lucide-react';
 
+import { getTrainerAvatar } from '../../utils/trainerUtils';
+
 export const Sidebar = () => {
   const { role, user, logout } = useAuth();
   const location = useLocation();
@@ -108,9 +110,12 @@ export const Sidebar = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
-              src={user?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}
+              src={getTrainerAvatar(user?.name, user?.avatar, user?.photo || user?.profileImage)}
               alt={user?.name}
-              className="w-9 h-9 rounded-full object-cover border border-amber-500/50"
+              onError={(e) => {
+                e.target.src = getTrainerAvatar(user?.name);
+              }}
+              className="w-9 h-9 rounded-full object-cover border border-amber-500/50 shadow-sm"
             />
             <div className="overflow-hidden">
               <p className="text-xs font-semibold text-white truncate">{user?.name || 'User'}</p>

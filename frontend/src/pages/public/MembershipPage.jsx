@@ -65,21 +65,28 @@ export const MembershipPage = () => {
 
           {/* Pricing Cards */}
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {MOCK_MEMBERSHIPS.map((plan) => {
+            {MOCK_MEMBERSHIPS.map((plan, index) => {
               const priceVal = billingCycle === 'annual'
                 ? `$${Math.round(parseInt(plan.price.replace('$', '')) * 0.8)}`
                 : plan.price;
               const isElite = plan.popular || plan.id === 'plan-crimson' || plan.name.includes('CRIMSON');
+              const planBgImage = index === 0 ? '/membership-plan-1.png' : index === 1 ? '/membership-plan-2.png' : '/membership-plan-3.png';
 
               return (
                 <StaggerItem key={plan.id}>
                   <Card
-                    className={`h-full flex flex-col justify-between relative transition-all duration-300 ${
+                    className={`h-full flex flex-col justify-between relative overflow-hidden group transition-all duration-300 ${
                       isElite
-                        ? 'border-amber-500 shadow-crimson-glow bg-dark-card/90 hover:scale-[1.03] hover:border-amber-400'
-                        : 'hover:scale-[1.01]'
+                        ? 'border-amber-500 shadow-crimson-glow bg-black/90 hover:scale-[1.03] hover:border-amber-400'
+                        : 'border-white/10 bg-black/90 hover:scale-[1.01]'
                     }`}
                   >
+                    {/* Centered Transparent Background Image with mix-blend-screen to remove black box edges */}
+                    <div
+                      className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-45 mix-blend-screen pointer-events-none transition-all duration-700 group-hover:opacity-65 scale-105"
+                      style={{ backgroundImage: `url('${planBgImage}')` }}
+                    />
+
                     {isElite && (
                       <div className="absolute top-5 right-6 z-10">
                         <Badge variant="amber" className="py-1.5 px-3.5 text-[10px] sm:text-xs font-black tracking-wider uppercase shadow-crimson-sm">
@@ -87,7 +94,7 @@ export const MembershipPage = () => {
                         </Badge>
                       </div>
                     )}
-                    <div className="space-y-6">
+                    <div className="space-y-6 relative z-10">
                       <div>
                         <h3 className="text-xl font-extrabold text-white font-display uppercase flex items-center gap-2">
                           {plan.name}
@@ -110,7 +117,7 @@ export const MembershipPage = () => {
                       </div>
                     </div>
 
-                    <div className="pt-8">
+                    <div className="pt-8 relative z-10">
                       <Button
                         variant={isElite ? 'primary' : 'outline'}
                         size="md"

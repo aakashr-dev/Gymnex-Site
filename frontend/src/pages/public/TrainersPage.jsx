@@ -17,7 +17,66 @@ export const TrainersPage = () => {
     try {
       const data = await api.getTrainers();
       if (Array.isArray(data) && data.length > 0) {
-        setTrainers(data);
+        let combined = data.map(t => {
+          const nameLower = (t.name || '').toLowerCase();
+          if (nameLower.includes('hari')) {
+            return {
+              ...t,
+              photo: '/trainer-hari-black.png',
+              avatar: '/trainer-hari-black.png'
+            };
+          }
+          if (nameLower.includes('logesh')) {
+            return {
+              ...t,
+              photo: '/trainer-logesh.png',
+              avatar: '/trainer-logesh.png'
+            };
+          }
+          if (nameLower.includes('kumar')) {
+            return {
+              ...t,
+              photo: '/trainer-kumar.png',
+              avatar: '/trainer-kumar.png'
+            };
+          }
+          if (nameLower.includes('lisa')) {
+            return {
+              ...t,
+              photo: '/trainer-lisa.png',
+              avatar: '/trainer-lisa.png'
+            };
+          }
+          if (nameLower.includes('hemath') || nameLower.includes('hemanth')) {
+            return {
+              ...t,
+              photo: '/trainer-hemath.png',
+              avatar: '/trainer-hemath.png'
+            };
+          }
+          return t;
+        });
+        if (!combined.some(t => (t.name || '').toLowerCase().includes('hari'))) {
+          const mockHari = MOCK_TRAINERS.find(t => (t.name || '').toLowerCase().includes('hari'));
+          if (mockHari) combined.unshift(mockHari);
+        }
+        if (!combined.some(t => (t.name || '').toLowerCase().includes('logesh'))) {
+          const mockLogesh = MOCK_TRAINERS.find(t => (t.name || '').toLowerCase().includes('logesh'));
+          if (mockLogesh) combined.splice(1, 0, mockLogesh);
+        }
+        if (!combined.some(t => (t.name || '').toLowerCase().includes('kumar'))) {
+          const mockKumar = MOCK_TRAINERS.find(t => (t.name || '').toLowerCase().includes('kumar'));
+          if (mockKumar) combined.splice(2, 0, mockKumar);
+        }
+        if (!combined.some(t => (t.name || '').toLowerCase().includes('lisa'))) {
+          const mockLisa = MOCK_TRAINERS.find(t => (t.name || '').toLowerCase().includes('lisa'));
+          if (mockLisa) combined.splice(3, 0, mockLisa);
+        }
+        if (!combined.some(t => (t.name || '').toLowerCase().includes('hemath') || (t.name || '').toLowerCase().includes('hemanth'))) {
+          const mockHemath = MOCK_TRAINERS.find(t => (t.name || '').toLowerCase().includes('hemath') || (t.name || '').toLowerCase().includes('hemanth'));
+          if (mockHemath) combined.push(mockHemath);
+        }
+        setTrainers(combined);
       } else {
         setTrainers(MOCK_TRAINERS);
       }

@@ -15,6 +15,8 @@ import {
   Gift
 } from 'lucide-react';
 
+import { MOCK_MEMBERSHIPS } from '../../data/mockData';
+
 export const AdminMemberships = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,9 +42,30 @@ export const AdminMemberships = () => {
     setLoading(true);
     try {
       const data = await api.getMemberships();
-      if (Array.isArray(data)) setPlans(data);
+      if (Array.isArray(data) && data.length > 0) {
+        setPlans(data.map(p => ({
+          ...p,
+          benefits: p.benefits || p.features || [],
+          price: typeof p.price === 'string' ? parseInt(p.price.replace('$', '')) || p.price : p.price
+        })));
+      } else {
+        setPlans(MOCK_MEMBERSHIPS.map(m => ({
+          ...m,
+          benefits: m.features || m.benefits,
+          price: parseInt(m.price.replace('$', '')),
+          duration: '1 Month',
+          status: 'Active'
+        })));
+      }
     } catch (err) {
       console.error('Error fetching memberships:', err);
+      setPlans(MOCK_MEMBERSHIPS.map(m => ({
+        ...m,
+        benefits: m.features || m.benefits,
+        price: parseInt(m.price.replace('$', '')),
+        duration: '1 Month',
+        status: 'Active'
+      })));
     } finally {
       setLoading(false);
     }
@@ -190,14 +213,15 @@ export const AdminMemberships = () => {
 
         {/* Plan Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {plans.map((plan) => {
+          {plans.map((plan, index) => {
             const isOffer = plan.isSeasonalOffer;
             const discountedPrice = isOffer && plan.discountPercentage ? Math.round(plan.price * (1 - plan.discountPercentage / 100)) : plan.price;
+            const planBgImage = index === 0 ? '/membership-plan-1.png' : index === 1 ? '/membership-plan-2.png' : '/membership-plan-3.png';
 
             return (
               <div
                 key={plan._id || plan.id || plan.planId}
-                className={`bg-dark-card border rounded-3xl p-6 flex flex-col justify-between space-y-6 transition-all shadow-xl ${
+                className={`bg-black/90 border rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden group transition-all shadow-xl ${
                   plan.status === 'Disabled'
                     ? 'opacity-60 border-white/10'
                     : plan.popular
@@ -205,7 +229,13 @@ export const AdminMemberships = () => {
                     : 'border-white/10 hover:border-amber-500/30'
                 }`}
               >
-                <div className="space-y-4">
+                {/* Centered Transparent Background Image with mix-blend-screen */}
+                <div
+                  className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-45 mix-blend-screen pointer-events-none transition-all duration-700 group-hover:opacity-65 scale-105"
+                  style={{ backgroundImage: `url('${planBgImage}')` }}
+                />
+
+                <div className="space-y-4 relative z-10">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-black text-white font-display uppercase tracking-tight">{plan.name}</h3>
                     <div className="flex items-center gap-1.5">
@@ -247,7 +277,7 @@ export const AdminMemberships = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2 pt-2 border-t border-white/10">
+                <div className="space-y-2 pt-2 border-t border-white/10 relative z-10">
                   <div className="flex items-center gap-2">
                     <Button
                       variant="glass"

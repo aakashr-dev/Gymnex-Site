@@ -8,7 +8,10 @@ import { sendSuccess, sendError } from '../utils/apiResponse.js';
 export const getAllMemberships = async (req, res) => {
   try {
     if (mongoose.connection.readyState === 1) {
-      const plans = await Membership.find({});
+      let plans = await Membership.find({});
+      if (!plans || plans.length === 0) {
+        plans = await Membership.insertMany(initialMemberships);
+      }
       const activePlans = plans.filter((p) => p.status === 'Active');
       const seasonalOffers = plans.filter((p) => p.isSeasonalOffer);
 
@@ -23,7 +26,7 @@ export const getAllMemberships = async (req, res) => {
       return sendSuccess(res, 'Membership plans fetched from fallback.', initialMemberships);
     }
   } catch (error) {
-    return sendError(res, error.message, 500);
+    return sendSuccess(res, 'Membership plans fetched from fallback.', initialMemberships);
   }
 };
 

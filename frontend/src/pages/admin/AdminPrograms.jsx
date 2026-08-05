@@ -36,18 +36,23 @@ export const AdminPrograms = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {programs.map((prog) => (
-            <Card key={prog._id || prog.id || prog.programId} className="space-y-3">
-              <img src={prog.image || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800'} alt={prog.title} className="w-full h-40 rounded-xl object-cover" />
-              <Badge variant="crimson">{prog.level || 'Intermediate'}</Badge>
-              <h3 className="text-base font-bold text-white font-display uppercase">{prog.title}</h3>
-              <p className="text-xs text-gray-400">{prog.description}</p>
-              <div className="flex justify-between text-xs text-gray-400 pt-2 border-t border-white/10">
-                <span>{prog.duration || '8 Weeks'}</span>
-                <span>{prog.exercisesCount || 12} Exercises Prescribed</span>
-              </div>
-            </Card>
-          ))}
+          {programs.map((prog, index) => {
+            const progImg = (prog.image && prog.image.startsWith('/program-'))
+              ? prog.image
+              : `/program-${(index % 7) + 1}.jpg`;
+            return (
+              <Card key={prog._id || prog.id || prog.programId} className="space-y-3">
+                <img src={progImg} alt={prog.title} className="w-full h-40 rounded-xl object-cover" />
+                <Badge variant="crimson">{prog.level || 'Intermediate'}</Badge>
+                <h3 className="text-base font-bold text-white font-display uppercase">{prog.title}</h3>
+                <p className="text-xs text-gray-400">{prog.description}</p>
+                <div className="flex justify-between text-xs text-gray-400 pt-2 border-t border-white/10">
+                  <span>{prog.duration || '8 Weeks'}</span>
+                  <span>{prog.exercisesCount || 12} Exercises Prescribed</span>
+                </div>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </PageTransition>

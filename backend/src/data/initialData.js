@@ -126,6 +126,71 @@ export const initialMembers = [
 
 export const initialTrainers = [
   {
+    id: 'trn-hari',
+    name: 'Coach Hari',
+    role: 'Master Olympic Strength & Powerlifting Specialist',
+    email: 'hari@gymnex.com',
+    avatar: '/trainer-hari-black.png',
+    photo: '/trainer-hari-black.png',
+    specialty: 'Olympic Weightlifting & Powerlifting',
+    experience: '10+ Years',
+    rating: 4.99,
+    clientsCount: 35,
+    bio: 'Master Olympic strength practitioner specializing in maximum 1RM power output, barbell biomechanics, and elite muscle architecture.'
+  },
+  {
+    id: 'trn-logesh',
+    name: 'Coach Logesh',
+    role: 'Master Hypertrophy & Muscle Architecture Specialist',
+    email: 'logesh@gymnex.com',
+    avatar: '/trainer-logesh.png',
+    photo: '/trainer-logesh.png',
+    specialty: 'Muscle Hypertrophy & Biomechanics',
+    experience: '9+ Years',
+    rating: 4.98,
+    clientsCount: 31,
+    bio: 'Hypertrophy specialist focused on high-performance muscle architecture, progressive volume overload, and compound movements.'
+  },
+  {
+    id: 'trn-kumar',
+    name: 'Coach Kumar',
+    role: 'Metabolic Conditioning & Fat Oxidation Specialist',
+    email: 'kumar@gymnex.com',
+    avatar: '/trainer-kumar.png',
+    photo: '/trainer-kumar.png',
+    specialty: 'Metabolic Conditioning & Fat Loss',
+    experience: '7+ Years',
+    rating: 4.96,
+    clientsCount: 29,
+    bio: 'High-intensity conditioning coach specializing in fat oxidation protocols, kettlebell circuits, and tactical endurance.'
+  },
+  {
+    id: 'trn-lisa',
+    name: 'Coach Lisa',
+    role: 'Functional Fitness & Calisthenics Specialist',
+    email: 'lisa@gymnex.com',
+    avatar: '/trainer-lisa.png',
+    photo: '/trainer-lisa.png',
+    specialty: 'Functional Mobility & Bodyweight Agility',
+    experience: '6+ Years',
+    rating: 4.95,
+    clientsCount: 24,
+    bio: 'Functional fitness specialist focusing on calisthenics mastery, kinetic core stability, and agility conditioning.'
+  },
+  {
+    id: 'trn-hemath',
+    name: 'Coach Hemath',
+    role: 'Transformation & Body Sculpting Specialist',
+    email: 'hemath@gymnex.com',
+    avatar: '/trainer-hemath.png',
+    photo: '/trainer-hemath.png',
+    specialty: 'Body Recomposition & Muscle Sculpting',
+    experience: '8+ Years',
+    rating: 4.97,
+    clientsCount: 26,
+    bio: 'Transformation authority specializing in lean body recomposition, hypertrophy splits, and aesthetic sculpting.'
+  },
+  {
     id: 'trn-1',
     name: 'Marcus Vance',
     role: 'Master Strength & Bodybuilding Specialist',
@@ -149,30 +214,6 @@ export const initialTrainers = [
   }
 ];
 
-export const initialMemberships = [
-  {
-    id: 'plan-base',
-    name: 'CORE ACCESS',
-    price: '$99',
-    period: '/month',
-    features: ['Single Branch Facility Access', 'Full Weightroom', 'Locker Room & Steam Access']
-  },
-  {
-    id: 'plan-crimson',
-    name: 'CRIMSON ELITE PASS',
-    price: '$189',
-    period: '/month',
-    features: ['Unlimited Global Multi-Branch Access', 'Recovery Suite (Cryo & Sauna)', '2 Trainer Sessions']
-  },
-  {
-    id: 'plan-black',
-    name: 'VIP BLACK EXECUTIVE',
-    price: '$349',
-    period: '/month',
-    features: ['24/7 Priority Global Access', 'Unlimited Coaching', 'Executive Locker & Laundry Service']
-  }
-];
-
 export const initialPrograms = [
   {
     id: 'prog-1',
@@ -183,7 +224,7 @@ export const initialPrograms = [
     intensity: 'High',
     instructor: 'Coach logesh',
     trainerName: 'Coach logesh',
-    image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&q=80&w=800',
+    image: '/program-1.jpg',
     description: 'High-volume periodized hypertrophy protocol engineered for maximum chest width, arm mass, and quad sweep.',
     features: ['Biostrenth Machine Integration', 'Progressive Overload Tracking', '1-on-1 Biomechanics Review'],
     target: 'Muscle Mass & Hypertrophy'
@@ -197,7 +238,7 @@ export const initialPrograms = [
     intensity: 'Maximum',
     instructor: 'Coach Hari',
     trainerName: 'Coach Hari',
-    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800',
+    image: '/program-2.jpg',
     description: 'Heavy compound powerlifting system focused on squat, bench press, and deadlift 1RM peak performance.',
     features: ['RPE-Based Auto-Regulation', 'Velocity Barbell Tracking', 'Power Competition Prep'],
     target: '1RM Strength Peak'
@@ -211,7 +252,7 @@ export const initialPrograms = [
     intensity: 'High',
     instructor: 'Coach Kumar',
     trainerName: 'Coach Kumar',
-    image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=800',
+    image: '/program-3.jpg',
     description: 'Aggressive fat oxidation conditioning combining kettlebell circuits, sprint intervals, and metabolic acceleration.',
     features: ['HR Zone Monitoring', 'Body Composition DEXA Review', 'Fat Oxidation Protocols'],
     target: 'Rapid Fat Oxidation'
@@ -225,7 +266,7 @@ export const initialPrograms = [
     intensity: 'High',
     instructor: 'Coach Hemath',
     trainerName: 'Coach Hemath',
-    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=800',
+    image: '/program-4.jpg',
     description: 'Full body aesthetic transformation program designed to build lean muscle definition while incinerating stubborn fat.',
     features: ['Tailored Nutrition Macros', 'Weekly Progress Photography', 'Customized Routine Splits'],
     target: 'Body Recomposition'
@@ -239,7 +280,7 @@ export const initialPrograms = [
     intensity: 'Maximum',
     instructor: 'Coach Hari',
     trainerName: 'Coach Hari',
-    image: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&q=80&w=800',
+    image: '/program-5.jpg',
     description: 'Precision technical coaching on Snatch, Clean & Jerk efficiency, and explosive bar speed.',
     features: ['High Speed Video Analysis', 'Eleiko Olympic Platform Pass', 'Triple Extension Drills'],
     target: 'Explosive Power & Skill'
@@ -253,7 +294,7 @@ export const initialPrograms = [
     intensity: 'Moderate',
     instructor: 'Coach Lisa',
     trainerName: 'Coach Lisa',
-    image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=800',
+    image: '/program-6.jpg',
     description: 'Bodyweight mastery, core stability, balance conditioning, and joint mobility enhancement.',
     features: ['Gymnastic Ring Drills', 'Core Kinetic Conditioning', 'Flexibility Mastery'],
     target: 'Functional Strength & Balance'
@@ -267,7 +308,7 @@ export const initialPrograms = [
     intensity: 'Low Impact',
     instructor: 'Coach Dmitri Volkov',
     trainerName: 'Coach Dmitri Volkov',
-    image: 'https://images.unsplash.com/photo-1570829460005-c840387bb1ca?auto=format&fit=crop&q=80&w=800',
+    image: '/program-7.jpg',
     description: 'Cold shock cryotherapy, infrared sauna thermal therapy, and post-rehab joint mobilization.',
     features: ['Cryotherapy Chamber Access', 'Infrared Hyperthermia', 'Myofascial Release'],
     target: 'Accelerated Recovery'
@@ -281,7 +322,7 @@ export const initialPrograms = [
     intensity: 'Maximum',
     instructor: 'Coach Sarah Jenkins',
     trainerName: 'Coach Sarah Jenkins',
-    image: 'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&q=80&w=800',
+    image: '/program-1.jpg',
     description: 'High-intensity heavy bag strikes, footwork drills, and cardiovascular endurance conditioning.',
     features: ['Heavy Bag Strikes', 'Speed Bag Drills', 'Anaerobic Endurance'],
     target: 'Stamina & Combat Fitness'
@@ -331,5 +372,87 @@ export const initialReviews = [
     rating: 5,
     quote: 'Having global access to Beverly Hills and Mayfair when traveling gives me seamless training continuity. The private VIP suites are world-class.',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300'
+  }
+];
+
+export const initialMemberships = [
+  {
+    planId: 'plan-base',
+    id: 'plan-base',
+    name: 'CORE ACCESS',
+    price: 99,
+    period: '/month',
+    duration: '1 Month',
+    popular: false,
+    badge: 'Standard',
+    status: 'Active',
+    benefits: [
+      'Access to Single Branch Facility',
+      'Full Weightroom & Cardio Floor',
+      'Locker Room & Steam Shower Access',
+      'GYMNEX Mobile App Member Dashboard',
+      '1 Complimentary Trainer Assessment'
+    ],
+    features: [
+      'Access to Single Branch Facility',
+      'Full Weightroom & Cardio Floor',
+      'Locker Room & Steam Shower Access',
+      'GYMNEX Mobile App Member Dashboard',
+      '1 Complimentary Trainer Assessment'
+    ]
+  },
+  {
+    planId: 'plan-crimson',
+    id: 'plan-crimson',
+    name: 'CRIMSON ELITE PASS',
+    price: 189,
+    period: '/month',
+    duration: '1 Month',
+    popular: true,
+    badge: 'MOST POPULAR',
+    status: 'Active',
+    benefits: [
+      'Unlimited Global Access to All Branches',
+      'Unlimited Group Fitness & Spin Classes',
+      'Recovery Suite (Cryo & Sauna 4x/mo)',
+      'Customized Workout & Diet Plans in App',
+      '2 Monthly Personal Trainer Sessions',
+      'Guest Pass Access (2 visits/month)'
+    ],
+    features: [
+      'Unlimited Global Access to All Branches',
+      'Unlimited Group Fitness & Spin Classes',
+      'Recovery Suite (Cryo & Sauna 4x/mo)',
+      'Customized Workout & Diet Plans in App',
+      '2 Monthly Personal Trainer Sessions',
+      'Guest Pass Access (2 visits/month)'
+    ]
+  },
+  {
+    planId: 'plan-black',
+    id: 'plan-black',
+    name: 'VIP BLACK EXECUTIVE',
+    price: 349,
+    period: '/month',
+    duration: '1 Month',
+    popular: false,
+    badge: 'ULTIMATE',
+    status: 'Active',
+    benefits: [
+      '24/7 Priority Global Access',
+      'Unlimited Personal Trainer Coaching',
+      'Private Executive Locker & Laundry Service',
+      'Unlimited Cryotherapy & Infrared Sauna',
+      'Biometric & DEXA Body Scan Monthly',
+      'Dedicated VIP Concierge Line'
+    ],
+    features: [
+      '24/7 Priority Global Access',
+      'Unlimited Personal Trainer Coaching',
+      'Private Executive Locker & Laundry Service',
+      'Unlimited Cryotherapy & Infrared Sauna',
+      'Biometric & DEXA Body Scan Monthly',
+      'Dedicated VIP Concierge Line'
+    ]
   }
 ];

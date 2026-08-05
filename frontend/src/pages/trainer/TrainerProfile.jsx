@@ -6,6 +6,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { User, Save, RefreshCw, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+import { getTrainerAvatar } from '../../utils/trainerUtils';
+
 export const TrainerProfile = () => {
   const { user } = useAuth();
   const [trainer, setTrainer] = useState(null);
@@ -27,7 +29,7 @@ export const TrainerProfile = () => {
           experience: '5+ Years',
           bio: 'Elite strength & conditioning coach specializing in periodized muscle architecture and biomechanical movement analysis.',
           schedule: 'Mon - Fri: 06:00 AM - 08:00 PM',
-          photo: user?.profileImage || 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&q=80&w=400'
+          photo: getTrainerAvatar(user?.name || 'Coach Hari', user?.avatar, user?.profileImage)
         });
       }
     } catch (err) {
@@ -82,9 +84,12 @@ export const TrainerProfile = () => {
         <Card className="space-y-6">
           <div className="flex items-center gap-4 pb-4 border-b border-white/10">
             <img
-              src={trainer?.photo || trainer?.avatar || user?.profileImage || 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&q=80&w=400'}
+              src={getTrainerAvatar(trainer?.name || user?.name, trainer?.avatar, trainer?.photo || user?.profileImage)}
               alt={trainer?.name}
-              className="w-16 h-16 rounded-full object-cover border-2 border-amber-500"
+              onError={(e) => {
+                e.target.src = getTrainerAvatar(trainer?.name || user?.name);
+              }}
+              className="w-16 h-16 rounded-full object-cover border-2 border-amber-500 shadow-crimson-glow"
             />
             <div>
               <div className="flex items-center gap-2">

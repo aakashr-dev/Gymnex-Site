@@ -25,15 +25,36 @@ export const getAllTrainers = async (req, res) => {
     // Dynamically calculate assigned members count for each trainer if needed
     const trainersWithCounts = await Promise.all(
       trainers.map(async (t) => {
+        let doc = t.toObject ? t.toObject() : t;
+        const nameLower = (doc.name || '').toLowerCase();
+        if (nameLower.includes('hari')) {
+          doc.photo = doc.photo || doc.avatar || '/trainer-hari-black.png';
+          doc.avatar = doc.avatar || doc.photo || '/trainer-hari-black.png';
+        }
+        if (nameLower.includes('logesh')) {
+          doc.photo = doc.photo || doc.avatar || '/trainer-logesh.png';
+          doc.avatar = doc.avatar || doc.photo || '/trainer-logesh.png';
+        }
+        if (nameLower.includes('kumar')) {
+          doc.photo = doc.photo || doc.avatar || '/trainer-kumar.png';
+          doc.avatar = doc.avatar || doc.photo || '/trainer-kumar.png';
+        }
+        if (nameLower.includes('lisa')) {
+          doc.photo = doc.photo || doc.avatar || '/trainer-lisa.png';
+          doc.avatar = doc.avatar || doc.photo || '/trainer-lisa.png';
+        }
+        if (nameLower.includes('hemath') || nameLower.includes('hemanth')) {
+          doc.photo = doc.photo || doc.avatar || '/trainer-hemath.png';
+          doc.avatar = doc.avatar || doc.photo || '/trainer-hemath.png';
+        }
         try {
           const count = await Member.countDocuments({
             $or: [{ personalTrainer: t._id }, { assignedTrainer: t._id }]
           });
-          const doc = t.toObject ? t.toObject() : t;
           doc.assignedMembersCount = count;
           return doc;
         } catch (e) {
-          return t.toObject ? t.toObject() : t;
+          return doc;
         }
       })
     );

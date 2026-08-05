@@ -14,7 +14,7 @@ export const PageTransition = ({ children }) => {
   );
 };
 
-export const FadeIn = ({ children, delay = 0, direction = 'up', className = '' }) => {
+export const FadeIn = ({ children, delay = 0, direction = 'up', className = '', trigger }) => {
   const directions = {
     up: { y: 30, x: 0 },
     down: { y: -30, x: 0 },
@@ -23,10 +23,13 @@ export const FadeIn = ({ children, delay = 0, direction = 'up', className = '' }
     none: { x: 0, y: 0 }
   };
 
+  const hasTrigger = trigger !== undefined;
+
   return (
     <motion.div
       initial={{ opacity: 0, ...directions[direction] }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      animate={hasTrigger ? (trigger ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, ...directions[direction] }) : undefined}
+      whileInView={!hasTrigger ? { opacity: 1, x: 0, y: 0 } : undefined}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
@@ -142,7 +145,7 @@ export const ImageReveal = ({ src, alt, className = '', aspectRatio = 'aspect-vi
 };
 
 /* AnimationSection Component for Scroll Reveal Section Animations */
-export const AnimationSection = ({ children, delay = 0, direction = 'up', className = '', id = '', ...props }) => {
+export const AnimationSection = ({ children, delay = 0, direction = 'up', className = '', id = '', trigger, ...props }) => {
   const directions = {
     up: { y: 35, x: 0 },
     down: { y: -35, x: 0 },
@@ -151,11 +154,14 @@ export const AnimationSection = ({ children, delay = 0, direction = 'up', classN
     none: { x: 0, y: 0 }
   };
 
+  const hasTrigger = trigger !== undefined;
+
   return (
     <motion.div
       id={id}
       initial={{ opacity: 0, ...directions[direction] }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      animate={hasTrigger ? (trigger ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, ...directions[direction] }) : undefined}
+      whileInView={!hasTrigger ? { opacity: 1, x: 0, y: 0 } : undefined}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}

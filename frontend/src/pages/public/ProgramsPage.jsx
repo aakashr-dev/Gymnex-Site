@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 export const ProgramsPage = () => {
   const navigate = useNavigate();
   const [programs, setPrograms] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [activeModalProgram, setActiveModalProgram] = useState(null);
 
   useEffect(() => {
@@ -38,15 +37,9 @@ export const ProgramsPage = () => {
     fetchLivePrograms();
   }, []);
 
-  const categories = ['All', 'Muscle & Mass Building', 'Strength & Powerlifting', 'Fat Loss & Shredding', 'Transformation & Body Sculpting', 'Functional & Calisthenics', 'Recovery & Mobility'];
-
-  const rawFiltered = selectedCategory === 'All'
-    ? programs
-    : programs.filter(p => (p.category || '').toLowerCase().trim() === selectedCategory.toLowerCase().trim());
-
-  const filteredPrograms = Array.from(
-    new Map(rawFiltered.map((p) => [(p.title || '').toLowerCase().trim() || p._id || p.id || p.programId, p])).values()
-  );
+  const displayPrograms = Array.from(
+    new Map(programs.map((p) => [(p.title || '').toLowerCase().trim() || p._id || p.id || p.programId, p])).values()
+  ).slice(0, 9);
 
   return (
     <PageTransition>
@@ -85,7 +78,7 @@ export const ProgramsPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
           {/* Header Section */}
           <div className="relative pt-4 pb-2">
-            {/* Header Content & Filter Buttons */}
+            {/* Header Content */}
             <div className="relative z-10 max-w-2xl space-y-8">
               <AnimationSection direction="up" delay={0.1}>
                 <SectionHeader
@@ -94,55 +87,43 @@ export const ProgramsPage = () => {
                   subtitle="Scientific periodization protocols engineered for muscle hypertrophy, fat oxidation, and maximal output."
                 />
               </AnimationSection>
-
-              {/* Filter Bar with Motion Animations */}
-              <AnimationSection direction="up" delay={0.2} className="flex flex-wrap items-center gap-3 pt-2">
-                {categories.map((cat) => (
-                  <motion.button
-                    key={cat}
-                    whileHover={{ scale: 1.06 }}
-                    whileTap={{ scale: 0.94 }}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                      selectedCategory === cat
-                        ? 'bg-amber-500 text-black font-extrabold shadow-crimson-sm scale-105'
-                        : 'bg-dark-card border border-white/10 text-gray-300 hover:text-white hover:border-amber-500/50'
-                    }`}
-                  >
-                    {cat}
-                  </motion.button>
-                ))}
-              </AnimationSection>
             </div>
           </div>
 
           {/* Programs Grid with Motion Cards */}
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {filteredPrograms.map((program) => (
-              <StaggerItem key={program._id || program.id || program.programId}>
-                <motion.div
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Card className="p-0 overflow-hidden group flex flex-col justify-between h-full hover:border-amber-500/50 transition-colors shadow-2xl">
-                    <div>
-                      <div className="relative h-64 overflow-hidden">
-                        <img
-                          src={program.image || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800'}
-                          alt={program.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-90"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-dark-card via-transparent to-transparent" />
-                        <div className="absolute top-4 left-4 bg-amber-500/90 text-black px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md">
-                          {program.level || 'Master Track'}
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+            {displayPrograms.map((program, index) => {
+              const programImg = (program.image && program.image.startsWith('/program-'))
+                ? program.image
+                : `/program-${(index % 7) + 1}.jpg`;
+
+              return (
+                <StaggerItem key={program._id || program.id || program.programId} className="h-full">
+                  <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
+                    className="h-full"
+                  >
+                    <Card className="p-0 overflow-hidden group flex flex-col justify-between h-full hover:border-amber-500/50 transition-colors shadow-2xl">
+                      <div className="flex flex-col flex-1">
+                        <div className="relative h-60 overflow-hidden">
+                          <img
+                            src={programImg}
+                            alt={program.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter contrast-110 brightness-95"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-dark-card via-transparent to-transparent" />
                         </div>
-                      </div>
-                      <div className="p-6 space-y-4">
-                        <h3 className="text-xl font-extrabold text-white font-display uppercase group-hover:text-amber-500 transition-colors">
-                          {program.title}
-                        </h3>
-                        <p className="text-xs text-gray-400 leading-relaxed">{program.description}</p>
-                        <div className="space-y-2 text-xs text-gray-300 pt-2 border-t border-white/10">
+                      <div className="p-6 flex flex-col flex-1 justify-between space-y-5">
+                        <div className="space-y-2">
+                          <h3 className="text-lg font-extrabold text-white font-display uppercase group-hover:text-amber-500 transition-colors line-clamp-2 h-14 flex items-center">
+                            {program.title}
+                          </h3>
+                          <p className="text-xs text-gray-400 leading-relaxed line-clamp-2 h-9">
+                            {program.description}
+                          </p>
+                        </div>
+                        <div className="space-y-2.5 text-xs text-gray-300 pt-3 border-t border-white/10 mt-auto">
                           <div className="flex items-center justify-between">
                             <span className="text-gray-500 font-semibold uppercase">Instructor:</span>
                             <span className="font-bold text-amber-400">{program.instructor || program.trainerName || 'Master Staff'}</span>
@@ -172,8 +153,9 @@ export const ProgramsPage = () => {
                   </Card>
                 </motion.div>
               </StaggerItem>
-            ))}
-          </StaggerContainer>
+            );
+          })}
+        </StaggerContainer>
         </div>
 
         {/* Curriculum Modal */}

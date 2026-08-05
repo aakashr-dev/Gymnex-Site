@@ -51,12 +51,12 @@ export const HomePage = () => {
   return (
     <PageTransition>
       {/* 1. HERO SECTION - Reference Composition Benchmark */}
-      <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden bg-dark-base select-none">
+      <section key={introDone ? 'hero-ready' : 'hero-init'} className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden bg-dark-base select-none">
         {/* Animated Smoke/Fog Multi-Layer Atmosphere */}
         <AtmosphericBackground />
 
         {/* Far Left Vertical Social Media Rail */}
-        <FadeIn direction="left" delay={0.2} className="hidden lg:flex flex-col items-center gap-5 absolute left-8 md:left-12 top-1/2 -translate-y-1/2 z-30">
+        <FadeIn direction="left" delay={0.2} trigger={introDone} className="hidden lg:flex flex-col items-center gap-5 absolute left-8 md:left-12 top-1/2 -translate-y-1/2 z-30">
           <span className="w-[1px] h-20 bg-gradient-to-b from-transparent via-white/30 to-white/10"></span>
           <div className="flex flex-col gap-5 text-gray-400">
             <a href="#" className="hover:text-amber-500 transition-colors duration-300 transform hover:scale-110 p-1" title="Facebook">
@@ -74,14 +74,14 @@ export const HomePage = () => {
 
         {/* Stacked Oversized Display Headline ("HARD BODY GAME / TIME TO CHANGE") - Strictly Behind Athletes (z-5) */}
         <div className="absolute inset-0 hidden md:flex flex-col items-center justify-center z-5 text-center px-4 pointer-events-none">
-          <LayeredHeroText key="hero-headline" line1="HARD BODY GAME" line2="TIME TO CHANGE" delay={0.15} />
+          <LayeredHeroText key="hero-headline" line1="HARD BODY GAME" line2="TIME TO CHANGE" delay={0.15} trigger={introDone} />
         </div>
 
         {/* Mobile Composition */}
         <div className="md:hidden relative z-10 text-center px-4 pt-6 space-y-1">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={introDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-4xl sm:text-5xl font-black uppercase text-amber-500 font-display tracking-tight"
           >
@@ -89,7 +89,7 @@ export const HomePage = () => {
           </motion.h1>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={introDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.25 }}
             className="text-4xl sm:text-5xl font-black uppercase text-white font-display tracking-tight -mt-2"
           >
@@ -101,7 +101,7 @@ export const HomePage = () => {
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 w-full max-w-3xl h-[68vh] md:h-[82vh] flex items-end justify-center pointer-events-none">
           <motion.img
             initial={{ opacity: 0, scale: 0.88, y: 80 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            animate={introDone ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.88, y: 80 }}
             transition={{ duration: 1.2, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             src="/hero-athletes.png"
             alt="GYMNEX Master Athletes"
@@ -113,7 +113,7 @@ export const HomePage = () => {
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 hidden md:flex flex-col items-center gap-2 text-gray-500">
           <span className="text-[10px] uppercase font-bold tracking-widest">Scroll Down</span>
           <motion.div
-            animate={{ y: [0, 6, 0] }}
+            animate={introDone ? { y: [0, 6, 0] } : { opacity: 0 }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
             <ChevronDown className="w-4 h-4 text-amber-500" />

@@ -5,8 +5,12 @@ import { api } from '../../services/api';
 import { Users, Calendar, Dumbbell, Activity, Plus, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import { getTrainerAvatar } from '../../utils/trainerUtils';
+import { useAuth } from '../../contexts/AuthContext';
+
 export const TrainerOverview = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,12 +36,32 @@ export const TrainerOverview = () => {
   return (
     <PageTransition>
       <div className="space-y-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-extrabold text-white font-display uppercase">COACH CONSOLE OVERVIEW</h1>
-            <p className="text-xs text-gray-400">Assigned 1-on-1 athletes, today's schedule, and workout approvals.</p>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-dark-card border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+          <div className="flex items-center gap-5 z-10">
+            <img
+              src={getTrainerAvatar(profile?.name || user?.name, profile?.avatar, profile?.photo || user?.profileImage)}
+              alt={profile?.name || user?.name}
+              onError={(e) => {
+                e.target.src = getTrainerAvatar(profile?.name || user?.name);
+              }}
+              className="w-16 h-16 rounded-full object-cover border-2 border-amber-500 shadow-crimson-glow shrink-0"
+            />
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl md:text-3xl font-black text-white font-display uppercase tracking-tight">
+                  WELCOME BACK, {profile?.name || user?.name || 'COACH'}
+                </h1>
+                <Badge variant="amber">{profile?.availabilityStatus || 'Active Staff'}</Badge>
+              </div>
+              <p className="text-xs text-amber-400 font-semibold uppercase font-sans">
+                {profile?.role || profile?.specialization || profile?.specialty || 'Master Coach & Performance Specialist'}
+              </p>
+              <p className="text-xs text-gray-400 mt-0.5 font-sans">
+                Assigned 1-on-1 athletes, today's schedule, and workout routine prescriptions.
+              </p>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 z-10 shrink-0">
             <Button variant="glass" size="sm" onClick={fetchOverviewData} icon={RefreshCw} className="text-xs">
               Sync
             </Button>

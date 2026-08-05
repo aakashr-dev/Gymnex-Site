@@ -4,67 +4,79 @@ import { CountUpNumber, MagneticButton } from '../motion/MotionComponents';
 import { Search, X, ChevronRight, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
 
 /* Atmospheric Drifting Smoke Background Layer with multi-tiered turbulent wisps, screen blend & golden spotlight glow */
-export const AtmosphericBackground = ({ className = '' }) => (
-  <div className={`absolute inset-0 pointer-events-none overflow-hidden z-0 select-none ${className}`}>
-    {/* Native HTML5 Autoplay Looping Background Smoke Video with High Visibility */}
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      preload="auto"
-      style={{
-        filter: 'brightness(0.6) contrast(1.3) saturate(0.9)',
-        mixBlendMode: 'screen',
-        opacity: 0.85
-      }}
-      className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
-    >
-      <source src="/smoke.mp4" type="video/mp4" />
-      <source src="/videos/smoke.mp4" type="video/mp4" />
-      <source src="/hero-video.mp4" type="video/mp4" />
-    </video>
+export const AtmosphericBackground = ({ className = '' }) => {
+  const videoRef = React.useRef(null);
 
-    {/* Subtle Dark Overlay (40% Opacity) allowing smoke to remain clearly visible */}
-    <div className="absolute inset-0 bg-black/40 pointer-events-none z-0" />
+  React.useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch((err) => {
+        console.warn('Smoke video autoplay prevented:', err);
+      });
+    }
+  }, []);
 
-    {/* Subtle Outer Edge Vignette Only */}
-    <div
-      style={{
-        background: 'radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.65) 100%)'
-      }}
-      className="absolute inset-0 pointer-events-none z-0"
-    />
+  return (
+    <div className={`absolute inset-0 pointer-events-none overflow-hidden z-0 select-none ${className}`}>
+      {/* Native HTML5 Autoplay Looping Background Smoke Video with High Visibility */}
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        style={{
+          filter: 'brightness(0.6) contrast(1.3) saturate(0.9)',
+          mixBlendMode: 'screen',
+          opacity: 0.85
+        }}
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+      >
+        <source src="/videos/smoke.mp4" type="video/mp4" />
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
 
-    {/* Core Golden Ambient Spotlight Glow behind subject */}
-    <motion.div
-      animate={{ scale: [1, 1.12, 1.02, 1], opacity: [0.35, 0.55, 0.4, 0.35] }}
-      transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[900px] md:w-[1200px] h-[500px] md:h-[700px] bg-amber-500/15 blur-[170px] rounded-full pointer-events-none z-0"
-    />
+      {/* Subtle Dark Overlay (40% Opacity) allowing smoke to remain clearly visible */}
+      <div className="absolute inset-0 bg-black/40 pointer-events-none z-0" />
 
-    {/* Framer Motion Wisps for Additional Atmospheric Parallax Depth */}
-    <motion.div
-      animate={{ x: [-40, 60, -20, -40], y: [0, -35, 10, 0], opacity: [0.25, 0.45, 0.3, 0.25], scale: [1, 1.08, 0.98, 1] }}
-      transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
-      style={{ borderRadius: '42% 58% 65% 35% / 45% 40% 60% 55%', mixBlendMode: 'screen' }}
-      className="absolute -bottom-24 -left-48 w-[750px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0"
-    />
-    <motion.div
-      animate={{ x: [40, -60, 20, 40], y: [-15, 25, -5, -15], opacity: [0.22, 0.42, 0.28, 0.22], scale: [1, 1.1, 0.97, 1] }}
-      transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-      style={{ borderRadius: '55% 45% 40% 60% / 50% 55% 45% 50%', mixBlendMode: 'screen' }}
-      className="absolute -bottom-24 -right-48 w-[780px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0"
-    />
-  </div>
-);
+      {/* Subtle Outer Edge Vignette Only */}
+      <div
+        style={{
+          background: 'radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.65) 100%)'
+        }}
+        className="absolute inset-0 pointer-events-none z-0"
+      />
+
+      {/* Core Golden Ambient Spotlight Glow behind subject */}
+      <motion.div
+        animate={{ scale: [1, 1.12, 1.02, 1], opacity: [0.35, 0.55, 0.4, 0.35] }}
+        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[900px] md:w-[1200px] h-[500px] md:h-[700px] bg-amber-500/15 blur-[170px] rounded-full pointer-events-none z-0"
+      />
+
+      {/* Framer Motion Wisps for Additional Atmospheric Parallax Depth */}
+      <motion.div
+        animate={{ x: [-40, 60, -20, -40], y: [0, -35, 10, 0], opacity: [0.25, 0.45, 0.3, 0.25], scale: [1, 1.08, 0.98, 1] }}
+        transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ borderRadius: '42% 58% 65% 35% / 45% 40% 60% 55%', mixBlendMode: 'screen' }}
+        className="absolute -bottom-24 -left-48 w-[750px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0"
+      />
+      <motion.div
+        animate={{ x: [40, -60, 20, 40], y: [-15, 25, -5, -15], opacity: [0.22, 0.42, 0.28, 0.22], scale: [1, 1.1, 0.97, 1] }}
+        transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+        style={{ borderRadius: '55% 45% 40% 60% / 50% 55% 45% 50%', mixBlendMode: 'screen' }}
+        className="absolute -bottom-24 -right-48 w-[780px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0"
+      />
+    </div>
+  );
+};
 
 /* Layered Oversized Text-Behind-Subject Helper - Rugged Editorial Headline Typography */
-export const LayeredHeroText = ({ line1, line2, delay = 0, className = '' }) => (
+export const LayeredHeroText = ({ line1, line2, delay = 0, className = '', trigger = true }) => (
   <div className={`flex flex-col items-center justify-center text-center select-none relative z-0 pointer-events-none ${className}`}>
     <motion.h1
       initial={{ opacity: 0, y: 50, scale: 0.95 }}
-      animate={{ opacity: 0.95, y: 0, scale: 1 }}
+      animate={trigger ? { opacity: 0.95, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.95 }}
       transition={{ duration: 1.1, delay: delay, ease: [0.22, 1, 0.36, 1] }}
       className="text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-black uppercase tracking-widest leading-[0.95] font-display text-amber-500 font-rugged-display filter drop-shadow-[0_20px_45px_rgba(0,0,0,0.99)]"
     >
@@ -73,7 +85,7 @@ export const LayeredHeroText = ({ line1, line2, delay = 0, className = '' }) => 
     {line2 && (
       <motion.h1
         initial={{ opacity: 0, y: 50, scale: 0.95 }}
-        animate={{ opacity: 0.98, y: 0, scale: 1 }}
+        animate={trigger ? { opacity: 0.98, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.95 }}
         transition={{ duration: 1.1, delay: delay + 0.15, ease: [0.22, 1, 0.36, 1] }}
         className="text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-black uppercase tracking-widest leading-[0.95] font-display text-white mt-2 sm:mt-3 md:mt-4 lg:mt-5 font-rugged-display filter drop-shadow-[0_25px_50px_rgba(0,0,0,0.99)]"
       >
@@ -84,33 +96,60 @@ export const LayeredHeroText = ({ line1, line2, delay = 0, className = '' }) => 
 );
 
 /* Circular Photo Card Component - Reference Style Feature Highlight */
-export const CircularCard = ({ image, title, subtitle, description, onClick, onMouseEnter, onMouseLeave, className = '' }) => (
-  <div
-    onClick={onClick}
-    onMouseEnter={onMouseEnter}
-    onMouseLeave={onMouseLeave}
-    className={`text-center space-y-4 group ${onClick ? 'cursor-pointer' : ''} ${className}`}
-  >
-    <div className="relative w-40 h-40 md:w-48 md:h-48 mx-auto rounded-full overflow-hidden border-2 border-white/10 p-1.5 group-hover:border-amber-500 group-hover:shadow-crimson-glow transition-all duration-500 bg-dark-card">
-      <img
-        src={image}
-        alt={title}
-        className="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-95 contrast-105"
-      />
+export const CircularCard = ({ image, title, subtitle, description, onClick, onMouseEnter, onMouseLeave, className = '' }) => {
+  const titleLower = (title || '').toLowerCase();
+  const isHari = titleLower.includes('hari');
+  const isHemath = titleLower.includes('hemath') || titleLower.includes('hemanth');
+  const isLogesh = titleLower.includes('logesh');
+  const isKumar = titleLower.includes('kumar');
+  const isLisa = titleLower.includes('lisa');
+  
+  let fallbackImg = 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&q=80&w=600';
+  if (isHari) fallbackImg = '/trainer-hari-black.png';
+  if (isHemath) fallbackImg = '/trainer-hemath.png';
+  if (isLogesh) fallbackImg = '/trainer-logesh.png';
+  if (isKumar) fallbackImg = '/trainer-kumar.png';
+  if (isLisa) fallbackImg = '/trainer-lisa.png';
+
+  const validImage = (image && image.trim() !== '') ? image : fallbackImg;
+  const finalSrc = (isHari && (!image || image.trim() === '')) ? '/trainer-hari-black.png' 
+    : (isHemath && (!image || image.trim() === '')) ? '/trainer-hemath.png' 
+    : (isLogesh && (!image || image.trim() === '')) ? '/trainer-logesh.png' 
+    : (isKumar && (!image || image.trim() === '')) ? '/trainer-kumar.png' 
+    : (isLisa && (!image || image.trim() === '')) ? '/trainer-lisa.png' 
+    : validImage;
+
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={`text-center space-y-4 group ${onClick ? 'cursor-pointer' : ''} ${className}`}
+    >
+      <div className="relative w-40 h-40 md:w-48 md:h-48 mx-auto rounded-full overflow-hidden border-2 border-white/10 p-1.5 group-hover:border-amber-500 group-hover:shadow-crimson-glow transition-all duration-500 bg-black">
+        <img
+          src={finalSrc}
+          alt={title}
+          onError={(e) => {
+            e.target.src = fallbackImg;
+          }}
+          className="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-95 contrast-105"
+        />
+      </div>
+      <div className="space-y-1">
+        <h3 className="text-xl md:text-2xl font-black text-white font-display uppercase tracking-wider group-hover:text-amber-500 transition-colors">
+          {title}
+        </h3>
+        {subtitle && <p className="text-xs text-amber-500 font-extrabold uppercase tracking-widest font-sans">{subtitle}</p>}
+      </div>
+      {description && (
+        <p className="text-xs text-gray-400 max-w-xs mx-auto leading-relaxed line-clamp-3 font-normal">
+          {description}
+        </p>
+      )}
     </div>
-    <div className="space-y-1">
-      <h3 className="text-xl md:text-2xl font-black text-white font-display uppercase tracking-wider group-hover:text-amber-500 transition-colors">
-        {title}
-      </h3>
-      {subtitle && <p className="text-xs text-amber-500 font-extrabold uppercase tracking-widest font-sans">{subtitle}</p>}
-    </div>
-    {description && (
-      <p className="text-xs text-gray-400 max-w-xs mx-auto leading-relaxed line-clamp-3 font-normal">
-        {description}
-      </p>
-    )}
-  </div>
-);
+  );
+};
 
 export const Eyebrow = ({ children, className = '' }) => (
   <div className={`inline-flex items-center gap-2 text-xs font-black tracking-widest text-amber-500 uppercase font-sans ${className}`}>
