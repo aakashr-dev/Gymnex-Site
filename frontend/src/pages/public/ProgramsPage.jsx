@@ -15,18 +15,24 @@ export const ProgramsPage = () => {
 
   useEffect(() => {
     const fetchLivePrograms = async () => {
-      const data = await api.getPrograms();
-      if (data && data.length > 0) {
-        // Deduplicate programs by title to prevent repeated cards
+      try {
+        const data = await api.getPrograms();
+        let list = [];
+        if (Array.isArray(data) && data.length > 0) {
+          list = [...data];
+        }
+        // Fill missing items from MOCK_PROGRAMS to ensure rich cards for all categories
+        const missingFromMock = MOCK_PROGRAMS.filter(
+          (m) => !list.some((item) => (item.title || '').toLowerCase().trim() === (m.title || '').toLowerCase().trim())
+        );
+        const combined = [...list, ...missingFromMock];
         const unique = Array.from(
-          new Map(data.map((item) => [item.title?.toLowerCase().trim() || item._id || item.id, item])).values()
+          new Map(combined.map((item) => [(item.title || '').toLowerCase().trim() || item._id || item.id || item.programId, item])).values()
         );
         setPrograms(unique);
-      } else {
-        const uniqueMock = Array.from(
-          new Map(MOCK_PROGRAMS.map((item) => [item.title?.toLowerCase().trim() || item.id, item])).values()
-        );
-        setPrograms(uniqueMock);
+      } catch (err) {
+        console.error('Failed to fetch programs:', err);
+        setPrograms(MOCK_PROGRAMS);
       }
     };
     fetchLivePrograms();
@@ -36,10 +42,10 @@ export const ProgramsPage = () => {
 
   const rawFiltered = selectedCategory === 'All'
     ? programs
-    : programs.filter(p => p.category === selectedCategory);
+    : programs.filter(p => (p.category || '').toLowerCase().trim() === selectedCategory.toLowerCase().trim());
 
   const filteredPrograms = Array.from(
-    new Map(rawFiltered.map((p) => [p.title?.toLowerCase().trim() || p._id || p.id, p])).values()
+    new Map(rawFiltered.map((p) => [(p.title || '').toLowerCase().trim() || p._id || p.id || p.programId, p])).values()
   );
 
   return (
@@ -47,35 +53,38 @@ export const ProgramsPage = () => {
       <div className="pt-28 pb-24 bg-dark-base min-h-screen relative overflow-hidden">
         <AtmosphericBackground />
 
+        {/* Full-Width Hero Background Image with Seamless Bottom Gradient Dissolve */}
+        <div className="absolute top-0 left-0 right-0 w-full h-[650px] lg:h-[750px] overflow-hidden pointer-events-none z-0 [mask-image:linear-gradient(to_bottom,black_30%,transparent_98%)] [-webkit-mask-image:linear-gradient(to_bottom,black_30%,transparent_98%)]">
+          <motion.img
+            initial={{ opacity: 0, scale: 1.08 }}
+            animate={{ opacity: 1, scale: [1, 1.05, 1] }}
+            transition={{
+              opacity: { duration: 1, ease: [0.22, 1, 0.36, 1] },
+              scale: { duration: 10, repeat: Infinity, ease: 'easeInOut' }
+            }}
+            src="/battle-ropes.jpg"
+            alt="GYMNEX Athletic Training Systems Battle Ropes Athlete"
+            className="w-full h-full object-cover object-center filter contrast-125 brightness-95"
+          />
+
+          {/* Pulsing Overhead Gym Spotlight Glow */}
+          <motion.div
+            animate={{ opacity: [0.35, 0.75, 0.35], scale: [0.95, 1.15, 0.95] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-8 right-[25%] w-72 h-72 bg-amber-500/20 blur-3xl rounded-full"
+          />
+
+          {/* Horizontal Text Readability Vignette */}
+          <div className="absolute inset-0 bg-gradient-to-r from-dark-base via-dark-base/85 lg:via-dark-base/70 to-dark-base/40 z-10" />
+
+          {/* Top & Bottom Seamless Dark Dissolve Gradients */}
+          <div className="absolute inset-0 bg-gradient-to-b from-dark-base/60 via-transparent via-60% to-dark-base z-10" />
+          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-transparent to-dark-base z-20" />
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
-          {/* Header Section with Right-Aligned Seamless Battle Ropes Background */}
+          {/* Header Section */}
           <div className="relative pt-4 pb-2">
-            {/* Seamless Right-Side Battle Ropes Athlete Background */}
-            <div className="absolute top-0 right-0 w-full lg:w-3/4 h-[460px] lg:h-[520px] -mt-10 overflow-hidden pointer-events-none z-0">
-              <motion.img
-                initial={{ opacity: 0, scale: 1.08, x: 50 }}
-                animate={{ opacity: 1, scale: [1, 1.04, 1], x: 0 }}
-                transition={{
-                  opacity: { duration: 1, ease: [0.22, 1, 0.36, 1] },
-                  scale: { duration: 8, repeat: Infinity, ease: 'easeInOut' }
-                }}
-                src="/battle-ropes.jpg"
-                alt="GYMNEX Athletic Training Systems Battle Ropes Athlete"
-                className="w-full h-full object-cover object-right filter contrast-125 brightness-110"
-              />
-
-              {/* Pulsing Overhead Gym Spotlight Glow */}
-              <motion.div
-                animate={{ opacity: [0.35, 0.8, 0.35], scale: [0.95, 1.15, 0.95] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute top-4 right-[20%] w-56 h-56 bg-white/20 blur-3xl rounded-full"
-              />
-
-              {/* Seamless Blending Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-r from-dark-base via-dark-base/85 lg:via-dark-base/60 to-transparent z-10" />
-              <div className="absolute inset-0 bg-gradient-to-t from-dark-base via-transparent to-dark-base/60 z-10" />
-            </div>
-
             {/* Header Content & Filter Buttons */}
             <div className="relative z-10 max-w-2xl space-y-8">
               <AnimationSection direction="up" delay={0.1}>

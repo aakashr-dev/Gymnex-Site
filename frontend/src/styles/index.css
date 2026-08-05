@@ -32,8 +32,8 @@
   --color-dark-muted: #222226;
   --color-dark-subtle: #1A1A1E;
 
-  --font-sans: 'Barlow Condensed', 'Montserrat', system-ui, sans-serif;
-  --font-display: 'Bebas Neue', 'Teko', 'Oswald', sans-serif;
+  --font-sans: 'Montserrat', 'Outfit', system-ui, sans-serif;
+  --font-display: 'Oswald', 'Barlow Condensed', 'Montserrat', sans-serif;
 
   --shadow-crimson-glow: 0 0 35px -5px rgba(244, 180, 0, 0.45);
   --shadow-crimson-sm: 0 0 15px -3px rgba(244, 180, 0, 0.35);
@@ -45,14 +45,16 @@
     background-color: #050505;
     color: #f3f4f6;
     font-family: var(--font-sans);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
+    font-weight: 500;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+    font-weight: 700;
   }
 }
 
@@ -72,24 +74,33 @@
   background: #F4B400;
 }
 
-/* Rugged Athletic Typography Helpers */
-.font-rugged-display {
-  font-family: 'Bebas Neue', 'Teko', sans-serif;
-  letter-spacing: 0.06em;
+/* Medium Balanced Athletic Typography Helpers */
+.font-display {
+  font-family: 'Oswald', 'Barlow Condensed', 'Montserrat', sans-serif !important;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  font-weight: 700;
+}
+
+.font-rugged-display {
+  font-family: 'Oswald', 'Barlow Condensed', sans-serif !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 800;
 }
 
 .font-rugged-subhead {
-  font-family: 'Barlow Condensed', sans-serif;
-  letter-spacing: 0.08em;
+  font-family: 'Montserrat', 'Barlow Condensed', sans-serif !important;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 700;
 }
 
 .editorial-header {
-  font-family: 'Bebas Neue', 'Teko', sans-serif;
-  letter-spacing: 0.06em;
+  font-family: 'Oswald', 'Montserrat', sans-serif !important;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  font-weight: 800;
 }
 
 /* Glass & Texture Helpers */

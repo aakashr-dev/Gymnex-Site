@@ -99,18 +99,6 @@ export const HomePage = () => {
 
         {/* Centered Cutout Male & Female Athletes Photo - Strictly In Foreground (z-20) */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 w-full max-w-3xl h-[68vh] md:h-[82vh] flex items-end justify-center pointer-events-none">
-          {/* Foreground Swirling Smoke Puff Veil */}
-          <motion.div
-            animate={{
-              x: [-30, 30, -30],
-              y: [10, -20, 10],
-              opacity: [0.35, 0.65, 0.35],
-              scale: [0.95, 1.1, 0.95]
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute bottom-10 w-full h-[400px] bg-gradient-to-t from-white/[0.12] via-gray-200/[0.06] to-transparent blur-[75px] pointer-events-none z-15"
-          />
-
           <motion.img
             initial={{ opacity: 0, scale: 0.88, y: 80 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -119,7 +107,6 @@ export const HomePage = () => {
             alt="GYMNEX Master Athletes"
             className="h-full w-auto object-cover object-top filter contrast-105 drop-shadow-[0_20px_50px_rgba(0,0,0,0.95)] relative z-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-base via-transparent to-transparent z-25 pointer-events-none" />
         </div>
 
         {/* Scroll Indicator */}
@@ -276,25 +263,12 @@ export const HomePage = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative z-20 pt-2"
+            className="relative z-20 pt-2 pb-12"
           >
             <Button variant="primary" size="lg" onClick={() => navigate('/membership')} icon={ArrowRight}>
               BECOME A MEMBER
             </Button>
           </motion.div>
-
-          {/* Cutout Athlete Holding Chains (Cropped to Hip) - Scroll Reveal Animation & Snug Bottom */}
-          <div className="mt-3 relative z-10 w-full max-w-xl mx-auto flex justify-center items-end">
-            <motion.img
-              initial={{ opacity: 0, y: 90, scale: 0.85, filter: 'blur(12px)' }}
-              whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-              viewport={{ once: true, amount: 0.35, margin: '0px 0px -120px 0px' }}
-              transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-              src="/chain-athlete.png"
-              alt="GYMNEX Master Athlete Chains Cutout"
-              className="w-full h-auto max-h-[340px] sm:max-h-[380px] object-contain filter contrast-110 brightness-105 drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)] relative z-10"
-            />
-          </div>
         </div>
       </AnimationSection>
 

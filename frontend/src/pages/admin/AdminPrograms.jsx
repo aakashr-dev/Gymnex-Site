@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PageTransition } from '../../components/motion/MotionComponents';
 import { Card, Badge, Button } from '../../components/ui/UIComponents';
+import { MOCK_PROGRAMS } from '../../data/mockData';
 import { api } from '../../services/api';
 import { Plus, Dumbbell } from 'lucide-react';
 
@@ -9,12 +10,15 @@ export const AdminPrograms = () => {
 
   useEffect(() => {
     const fetchLivePrograms = async () => {
-      const data = await api.getPrograms();
-      if (data && data.length > 0) {
+      try {
+        const data = await api.getPrograms();
+        let list = Array.isArray(data) && data.length > 0 ? data : MOCK_PROGRAMS;
         const unique = Array.from(
-          new Map(data.map((item) => [item.title?.toLowerCase().trim() || item._id || item.id, item])).values()
+          new Map(list.map((item) => [(item.title || '').toLowerCase().trim() || item._id || item.id || item.programId, item])).values()
         );
         setPrograms(unique);
+      } catch (err) {
+        setPrograms(MOCK_PROGRAMS);
       }
     };
     fetchLivePrograms();

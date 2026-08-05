@@ -225,6 +225,32 @@ export const MOCK_PROGRAMS = [
     description: 'Lower body posterior chain strength protocol focusing on heavy squat technique and deadlift lockout power.',
     target: 'Lower Body Raw Power',
     exercisesCount: 34
+  },
+  {
+    id: 'prog-9',
+    title: 'TRANSFORMATION & BODY SCULPTING',
+    category: 'Transformation & Body Sculpting',
+    level: 'All Levels',
+    duration: '12 Weeks',
+    workoutsPerWeek: 5,
+    instructor: 'Sarah Jenkins',
+    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=800',
+    description: 'Full body aesthetic transformation program designed to build lean muscle definition while incinerating stubborn fat.',
+    target: 'Body Recomposition',
+    exercisesCount: 40
+  },
+  {
+    id: 'prog-10',
+    title: 'RECOVERY & CRYOTHERAPY VAULT PROTOCOL',
+    category: 'Recovery & Mobility',
+    level: 'All Levels',
+    duration: 'Ongoing',
+    workoutsPerWeek: 3,
+    instructor: 'Dmitri Volkov',
+    image: 'https://images.unsplash.com/photo-1570829460005-c840387bb1ca?auto=format&fit=crop&q=80&w=800',
+    description: 'Cold shock cryotherapy, infrared sauna thermal therapy, and post-rehab joint mobilization.',
+    target: 'Accelerated Recovery',
+    exercisesCount: 15
   }
 ];
 

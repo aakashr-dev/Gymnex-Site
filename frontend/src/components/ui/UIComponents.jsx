@@ -3,78 +3,59 @@ import { motion } from 'framer-motion';
 import { CountUpNumber, MagneticButton } from '../motion/MotionComponents';
 import { Search, X, ChevronRight, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
 
-/* Atmospheric Drifting Smoke Background Layer with multi-tier smoke billows & golden spotlight glow */
+/* Atmospheric Drifting Smoke Background Layer with multi-tiered turbulent wisps, screen blend & golden spotlight glow */
 export const AtmosphericBackground = ({ className = '' }) => (
-  <div className={`absolute inset-0 pointer-events-none overflow-hidden z-0 ${className}`}>
-    {/* Core Golden Ambient Glow behind athlete */}
-    <motion.div
-      animate={{
-        scale: [1, 1.15, 1.03, 1],
-        opacity: [0.35, 0.6, 0.45, 0.35]
+  <div className={`absolute inset-0 pointer-events-none overflow-hidden z-0 select-none ${className}`}>
+    {/* Native HTML5 Autoplay Looping Background Smoke Video with High Visibility */}
+    <video
+      autoPlay
+      loop
+      muted
+      playsInline
+      preload="auto"
+      style={{
+        filter: 'brightness(0.6) contrast(1.3) saturate(0.9)',
+        mixBlendMode: 'screen',
+        opacity: 0.85
       }}
-      transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[900px] md:w-[1300px] h-[500px] md:h-[750px] bg-amber-500/15 blur-[180px] rounded-full pointer-events-none"
+      className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+    >
+      <source src="/smoke.mp4" type="video/mp4" />
+      <source src="/videos/smoke.mp4" type="video/mp4" />
+      <source src="/hero-video.mp4" type="video/mp4" />
+    </video>
+
+    {/* Subtle Dark Overlay (40% Opacity) allowing smoke to remain clearly visible */}
+    <div className="absolute inset-0 bg-black/40 pointer-events-none z-0" />
+
+    {/* Subtle Outer Edge Vignette Only */}
+    <div
+      style={{
+        background: 'radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.65) 100%)'
+      }}
+      className="absolute inset-0 pointer-events-none z-0"
     />
 
-    {/* Flank Left Massive Billowing Smoke Cloud */}
+    {/* Core Golden Ambient Spotlight Glow behind subject */}
     <motion.div
-      animate={{
-        x: [-40, 50, -40],
-        y: [0, -35, 0],
-        scale: [1, 1.1, 1],
-        opacity: [0.4, 0.7, 0.4]
-      }}
-      transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute -bottom-10 -left-44 w-[900px] h-[750px] bg-gradient-to-tr from-white/[0.14] via-gray-300/[0.08] to-transparent blur-[110px] rounded-full pointer-events-none"
+      animate={{ scale: [1, 1.12, 1.02, 1], opacity: [0.35, 0.55, 0.4, 0.35] }}
+      transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+      className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[900px] md:w-[1200px] h-[500px] md:h-[700px] bg-amber-500/15 blur-[170px] rounded-full pointer-events-none z-0"
     />
 
-    {/* Flank Right Massive Billowing Smoke Cloud */}
+    {/* Framer Motion Wisps for Additional Atmospheric Parallax Depth */}
     <motion.div
-      animate={{
-        x: [50, -40, 50],
-        y: [-20, 25, -20],
-        scale: [1, 1.12, 1],
-        opacity: [0.35, 0.65, 0.35]
-      }}
-      transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute -bottom-10 -right-44 w-[950px] h-[750px] bg-gradient-to-tl from-white/[0.13] via-gray-300/[0.07] to-transparent blur-[120px] rounded-full pointer-events-none"
+      animate={{ x: [-40, 60, -20, -40], y: [0, -35, 10, 0], opacity: [0.25, 0.45, 0.3, 0.25], scale: [1, 1.08, 0.98, 1] }}
+      transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+      style={{ borderRadius: '42% 58% 65% 35% / 45% 40% 60% 55%', mixBlendMode: 'screen' }}
+      className="absolute -bottom-24 -left-48 w-[750px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0"
     />
-
-    {/* Swirling Center Fog Core Behind Athlete */}
     <motion.div
-      animate={{
-        scale: [0.95, 1.15, 0.95],
-        opacity: [0.45, 0.75, 0.45],
-        rotate: [0, 8, -5, 0]
-      }}
-      transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] md:w-[950px] h-[550px] bg-white/[0.09] blur-[95px] rounded-full pointer-events-none"
+      animate={{ x: [40, -60, 20, 40], y: [-15, 25, -5, -15], opacity: [0.22, 0.42, 0.28, 0.22], scale: [1, 1.1, 0.97, 1] }}
+      transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+      style={{ borderRadius: '55% 45% 40% 60% / 50% 55% 45% 50%', mixBlendMode: 'screen' }}
+      className="absolute -bottom-24 -right-48 w-[780px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0"
     />
-
-    {/* Floating Micro Smoke Billow 1 (Top Left) */}
-    <motion.div
-      animate={{
-        x: [-20, 30, -20],
-        y: [-30, 20, -30],
-        opacity: [0.2, 0.5, 0.2]
-      }}
-      transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute top-12 left-[10%] w-[500px] h-[400px] bg-white/[0.06] blur-[80px] rounded-full pointer-events-none"
-    />
-
-    {/* Floating Micro Smoke Billow 2 (Top Right) */}
-    <motion.div
-      animate={{
-        x: [30, -20, 30],
-        y: [20, -30, 20],
-        opacity: [0.2, 0.5, 0.2]
-      }}
-      transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute top-12 right-[10%] w-[550px] h-[420px] bg-white/[0.06] blur-[85px] rounded-full pointer-events-none"
-    />
-
-    {/* Bottom Vignette & Fade to Black Gradient */}
-    <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-dark-base via-dark-base/90 to-transparent z-10 pointer-events-none" />
   </div>
 );
 
@@ -85,7 +66,7 @@ export const LayeredHeroText = ({ line1, line2, delay = 0, className = '' }) => 
       initial={{ opacity: 0, y: 50, scale: 0.95 }}
       animate={{ opacity: 0.95, y: 0, scale: 1 }}
       transition={{ duration: 1.1, delay: delay, ease: [0.22, 1, 0.36, 1] }}
-      className="text-6xl sm:text-8xl md:text-[9.5rem] lg:text-[12rem] font-extrabold uppercase tracking-widest leading-[0.8] font-display text-amber-500 font-rugged-display filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.98)]"
+      className="text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-black uppercase tracking-widest leading-[0.95] font-display text-amber-500 font-rugged-display filter drop-shadow-[0_20px_45px_rgba(0,0,0,0.99)]"
     >
       {line1}
     </motion.h1>
@@ -94,7 +75,7 @@ export const LayeredHeroText = ({ line1, line2, delay = 0, className = '' }) => 
         initial={{ opacity: 0, y: 50, scale: 0.95 }}
         animate={{ opacity: 0.98, y: 0, scale: 1 }}
         transition={{ duration: 1.1, delay: delay + 0.15, ease: [0.22, 1, 0.36, 1] }}
-        className="text-6xl sm:text-8xl md:text-[9.5rem] lg:text-[12rem] font-extrabold uppercase tracking-widest leading-[0.8] font-display text-white -mt-1 sm:-mt-3 md:-mt-5 lg:-mt-8 font-rugged-display filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.99)]"
+        className="text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-black uppercase tracking-widest leading-[0.95] font-display text-white mt-2 sm:mt-3 md:mt-4 lg:mt-5 font-rugged-display filter drop-shadow-[0_25px_50px_rgba(0,0,0,0.99)]"
       >
         {line2}
       </motion.h1>

@@ -72,7 +72,7 @@ export const Navbar = () => {
         </Link>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden lg:flex items-center gap-8 text-sm uppercase font-black tracking-widest text-gray-300 font-sans">
+        <nav className="hidden lg:flex items-center gap-5 text-xs font-bold uppercase tracking-wider text-gray-300 font-sans">
           {mainLinks.map((link) => {
             const isActive = location.pathname === link.path;
 
@@ -103,48 +103,50 @@ export const Navbar = () => {
 
                   {/* Branches Hover Dropdown */}
                   {branchesDropdownOpen && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-80 bg-dark-card/95 border border-white/15 rounded-2xl p-2 shadow-2xl backdrop-blur-xl space-y-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                      <div className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-amber-500 border-b border-white/10 flex items-center justify-between">
-                        <span className="flex items-center gap-1.5">
-                          <Building2 className="w-3.5 h-3.5 text-amber-500" />
-                          GYMNEX Sanctuaries
-                        </span>
-                        <span className="text-[9px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-bold">
-                          {MOCK_BRANCHES.length} Locations
-                        </span>
-                      </div>
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-80 z-50">
+                      <div className="bg-dark-card/95 border border-white/15 rounded-2xl p-2 shadow-2xl backdrop-blur-xl space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-150">
+                        <div className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-amber-500 border-b border-white/10 flex items-center justify-between">
+                          <span className="flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-amber-500" />
+                            GYMNEX Sanctuaries
+                          </span>
+                          <span className="text-[9px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-bold">
+                            {MOCK_BRANCHES.length} Locations
+                          </span>
+                        </div>
 
-                      <div className="space-y-1">
-                        {MOCK_BRANCHES.map((branch) => (
-                          <button
-                            key={branch.id}
-                            onClick={() => handleBranchClick(branch.id)}
-                            className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all group/item flex items-center gap-3"
+                        <div className="space-y-1">
+                          {MOCK_BRANCHES.map((branch) => (
+                            <button
+                              key={branch.id}
+                              onClick={() => handleBranchClick(branch.id)}
+                              className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all group/item flex items-center gap-3 cursor-pointer"
+                            >
+                              <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-amber-500 group-hover/item:border-amber-500/50 group-hover/item:bg-amber-500 group-hover/item:text-black transition-all shrink-0">
+                                <MapPin className="w-4 h-4" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[12px] font-bold text-gray-200 group-hover/item:text-white truncate uppercase font-display tracking-wider">
+                                  {branch.name}
+                                </p>
+                                <p className="text-[10px] text-gray-400 font-medium truncate flex items-center gap-1">
+                                  <span>{branch.city}</span>
+                                </p>
+                              </div>
+                              <ChevronRight className="w-3.5 h-3.5 text-gray-500 group-hover/item:text-amber-500 group-hover/item:translate-x-0.5 transition-all" />
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="pt-1.5 border-t border-white/10">
+                          <Link
+                            to="/branches"
+                            onClick={() => setBranchesDropdownOpen(false)}
+                            className="block w-full text-center py-2 text-[10px] font-black uppercase tracking-widest text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-xl transition-colors"
                           >
-                            <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-amber-500 group-hover/item:border-amber-500/50 group-hover/item:bg-amber-500 group-hover/item:text-black transition-all shrink-0">
-                              <MapPin className="w-4 h-4" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-[12px] font-bold text-gray-200 group-hover/item:text-white truncate uppercase font-display tracking-wider">
-                                {branch.name}
-                              </p>
-                              <p className="text-[10px] text-gray-400 font-medium truncate flex items-center gap-1">
-                                <span>{branch.city}</span>
-                              </p>
-                            </div>
-                            <ChevronRight className="w-3.5 h-3.5 text-gray-500 group-hover/item:text-amber-500 group-hover/item:translate-x-0.5 transition-all" />
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="pt-1.5 border-t border-white/10">
-                        <Link
-                          to="/branches"
-                          onClick={() => setBranchesDropdownOpen(false)}
-                          className="block w-full text-center py-2 text-[10px] font-black uppercase tracking-widest text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-xl transition-colors"
-                        >
-                          Explore All Locations & Facilities →
-                        </Link>
+                            Explore All Locations & Facilities →
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -169,30 +171,32 @@ export const Navbar = () => {
           })}
 
           {/* More Dropdown */}
-          <div className="relative py-1">
+          <div
+            className="relative py-1"
+            onMouseEnter={() => setMoreDropdownOpen(true)}
+            onMouseLeave={() => setMoreDropdownOpen(false)}
+          >
             <button
               onClick={() => setMoreDropdownOpen(!moreDropdownOpen)}
-              onMouseEnter={() => setMoreDropdownOpen(true)}
-              className="flex items-center gap-1 transition-colors hover:text-amber-500"
+              className="flex items-center gap-1 transition-colors hover:text-amber-500 cursor-pointer"
             >
-              <span>Explore</span>
+              <span>EXPLORE</span>
               <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${moreDropdownOpen ? 'rotate-180 text-amber-500' : ''}`} />
             </button>
             {moreDropdownOpen && (
-              <div
-                onMouseLeave={() => setMoreDropdownOpen(false)}
-                className="absolute top-full right-0 mt-2 w-48 bg-dark-card border border-white/10 rounded-2xl p-2 shadow-2xl backdrop-blur-xl space-y-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
-              >
-                {secondaryLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setMoreDropdownOpen(false)}
-                    className="block px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-amber-500/20 rounded-xl transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+              <div className="absolute top-full right-0 pt-2 w-48 z-50">
+                <div className="bg-dark-card border border-white/10 rounded-2xl p-2 shadow-2xl backdrop-blur-xl space-y-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                  {secondaryLinks.map((link) => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      onClick={() => setMoreDropdownOpen(false)}
+                      className="block px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-amber-500/20 rounded-xl transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -221,74 +225,79 @@ export const Navbar = () => {
             <Button
               variant="glass"
               size="sm"
-              onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
+              onClick={() => {
+                setLoginDropdownOpen(false);
+                navigate('/auth');
+              }}
               icon={LogIn}
-              className="border-white/15 text-white hover:bg-white/10 font-bold"
+              className="border-white/15 text-white hover:bg-white/10 font-bold cursor-pointer"
             >
               <span>Login</span>
               <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${loginDropdownOpen ? 'rotate-180 text-amber-500' : ''}`} />
             </Button>
 
             {loginDropdownOpen && (
-              <div className="absolute top-full right-0 mt-2 w-56 bg-dark-card/95 border border-white/15 rounded-2xl p-2 shadow-2xl backdrop-blur-xl space-y-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-amber-500 border-b border-white/10 flex items-center justify-between">
-                  <span>Select Portal Login</span>
-                  <span className="text-[9px] text-gray-400">3 Portals</span>
+              <div className="absolute top-full right-0 pt-2 w-56 z-50">
+                <div className="bg-dark-card/95 border border-white/15 rounded-2xl p-2 shadow-2xl backdrop-blur-xl space-y-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-amber-500 border-b border-white/10 flex items-center justify-between">
+                    <span>Select Portal Login</span>
+                    <span className="text-[9px] text-gray-400">3 Portals</span>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setLoginDropdownOpen(false);
+                      navigate('/auth/admin');
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all flex items-center gap-2.5 group cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 group-hover:bg-amber-500 group-hover:text-black transition-colors">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-200 group-hover:text-white uppercase font-display">
+                        Admin Login
+                      </p>
+                      <p className="text-[10px] text-gray-400">Enterprise Control</p>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setLoginDropdownOpen(false);
+                      navigate('/auth/trainer');
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all flex items-center gap-2.5 group cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 group-hover:bg-amber-500 group-hover:text-black transition-colors">
+                      <UserCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-200 group-hover:text-white uppercase font-display">
+                        Trainer Login
+                      </p>
+                      <p className="text-[10px] text-gray-400">Clients & Workouts</p>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setLoginDropdownOpen(false);
+                      navigate('/auth/member');
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all flex items-center gap-2.5 group cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 group-hover:bg-amber-500 group-hover:text-black transition-colors">
+                      <User className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-200 group-hover:text-white uppercase font-display">
+                        Member Login
+                      </p>
+                      <p className="text-[10px] text-gray-400">Personal Dashboard</p>
+                    </div>
+                  </button>
                 </div>
-
-                <button
-                  onClick={() => {
-                    setLoginDropdownOpen(false);
-                    navigate('/auth/admin');
-                  }}
-                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all flex items-center gap-2.5 group"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 group-hover:bg-amber-500 group-hover:text-black transition-colors">
-                    <ShieldCheck className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-gray-200 group-hover:text-white uppercase font-display">
-                      Admin Login
-                    </p>
-                    <p className="text-[10px] text-gray-400">Enterprise Control</p>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => {
-                    setLoginDropdownOpen(false);
-                    navigate('/auth/trainer');
-                  }}
-                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all flex items-center gap-2.5 group"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 group-hover:bg-amber-500 group-hover:text-black transition-colors">
-                    <UserCheck className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-gray-200 group-hover:text-white uppercase font-display">
-                      Trainer Login
-                    </p>
-                    <p className="text-[10px] text-gray-400">Clients & Workouts</p>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => {
-                    setLoginDropdownOpen(false);
-                    navigate('/auth/member');
-                  }}
-                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all flex items-center gap-2.5 group"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 group-hover:bg-amber-500 group-hover:text-black transition-colors">
-                    <User className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-gray-200 group-hover:text-white uppercase font-display">
-                      Member Login
-                    </p>
-                    <p className="text-[10px] text-gray-400">Personal Dashboard</p>
-                  </div>
-                </button>
               </div>
             )}
           </div>

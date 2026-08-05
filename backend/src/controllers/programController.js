@@ -9,9 +9,16 @@ export const getAllPrograms = async (req, res) => {
       if (!programs || programs.length < initialPrograms.length) {
         try {
           await Program.deleteMany({});
-          programs = await Program.insertMany(initialPrograms);
+          const progDocs = initialPrograms.map((p) => ({
+            ...p,
+            programId: p.programId || p.id || `prog-${Math.random()}`
+          }));
+          programs = await Program.insertMany(progDocs);
         } catch (e) {
-          programs = initialPrograms;
+          programs = initialPrograms.map((p) => ({
+            ...p,
+            programId: p.programId || p.id || `prog-${Math.random()}`
+          }));
         }
       }
       return res.json({ success: true, count: programs.length, source: 'MongoDB', data: programs });
