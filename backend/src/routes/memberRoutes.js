@@ -3,6 +3,7 @@ import {
   getAllMembers,
   getUnassignedMembers,
   getMemberById,
+  getMyMemberProfile,
   createMember,
   assignTrainer,
   updateMemberStatus,
@@ -13,6 +14,7 @@ import { verifyToken, authorizeRoles } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+router.get('/me', verifyToken, getMyMemberProfile);
 router.get('/', verifyToken, authorizeRoles('Admin', 'Trainer'), getAllMembers);
 router.get('/unassigned', verifyToken, authorizeRoles('Admin'), getUnassignedMembers);
 router.get('/:id', verifyToken, getMemberById);

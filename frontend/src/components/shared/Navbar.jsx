@@ -38,7 +38,6 @@ export const Navbar = () => {
     { name: 'Reviews', path: '/reviews' },
     { name: 'About Us', path: '/about' },
     { name: 'Corporate', path: '/corporate' },
-    { name: 'Contact', path: '/contact' },
   ];
 
   const getDashboardPath = () => {
@@ -197,6 +196,19 @@ export const Navbar = () => {
               </div>
             )}
           </div>
+
+          {/* Contact (Last Nav Link) */}
+          <Link
+            to="/contact"
+            className={`transition-colors hover:text-amber-500 relative py-1 ${
+              location.pathname === '/contact' ? 'text-amber-500 font-extrabold' : ''
+            }`}
+          >
+            Contact
+            {location.pathname === '/contact' && (
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-amber-500 rounded-full" />
+            )}
+          </Link>
         </nav>
 
         {/* CTA Login Dropdown */}
@@ -285,7 +297,7 @@ export const Navbar = () => {
             variant="primary"
             size="sm"
             className="rounded-full shadow-crimson-glow font-extrabold bg-amber-500 text-black hover:bg-amber-600"
-            onClick={() => navigate('/auth')}
+            onClick={() => navigate('/membership')}
           >
             Join GYMNEX
           </Button>
@@ -362,6 +374,14 @@ export const Navbar = () => {
             </Link>
           ))}
 
+          <Link
+            to="/contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block py-2 text-xs font-extrabold uppercase tracking-widest text-amber-400 hover:text-amber-300"
+          >
+            Contact
+          </Link>
+
           <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
             <p className="text-[10px] font-black uppercase tracking-widest text-amber-500">Portal Login</p>
             <div className="grid grid-cols-3 gap-2">
@@ -390,8 +410,8 @@ export const Navbar = () => {
                 Member
               </Button>
             </div>
-            <Button variant="primary" size="sm" onClick={() => { setMobileMenuOpen(false); navigate('/auth'); }}>
-              Join Platform
+            <Button variant="primary" size="sm" onClick={() => { setMobileMenuOpen(false); navigate('/membership'); }}>
+              Join GYMNEX
             </Button>
           </div>
         </div>

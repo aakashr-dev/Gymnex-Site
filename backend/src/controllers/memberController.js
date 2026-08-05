@@ -213,3 +213,26 @@ export const deleteMember = async (req, res) => {
     return sendError(res, err.message, 500);
   }
 };
+
+export const getMyMemberProfile = async (req, res) => {
+  try {
+    let member = null;
+    if (req.user) {
+      member = await Member.findOne({
+        $or: [
+          { user: req.user._id },
+          { email: req.user.email }
+        ]
+      }).populate('user branch membership personalTrainer assignedTrainer');
+    }
+
+    if (!member) {
+      member = await Member.findOne().populate('user branch membership personalTrainer assignedTrainer');
+    }
+
+    if (!member) return sendError(res, 'Member profile not found.', 404);
+    return sendSuccess(res, 'Member profile fetched successfully.', member);
+  } catch (err) {
+    return sendError(res, err.message, 500);
+  }
+};

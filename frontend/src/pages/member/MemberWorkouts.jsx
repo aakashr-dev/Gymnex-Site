@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PageTransition } from '../../components/motion/MotionComponents';
 import { Card, Badge, Button, Modal } from '../../components/ui/UIComponents';
-import { Dumbbell, CheckCircle2, Play } from 'lucide-react';
+import { Dumbbell, CheckCircle2, Play, UserCheck } from 'lucide-react';
+import { api } from '../../services/api';
 import toast from 'react-hot-toast';
 
 export const MemberWorkouts = () => {
   const [completed, setCompleted] = useState({});
   const [activeVideo, setActiveVideo] = useState(null);
+  const [memberProfile, setMemberProfile] = useState(null);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const data = await api.getMyMemberProfile();
+        if (data) setMemberProfile(data);
+      } catch (err) {
+        console.error('Failed to load member profile:', err);
+      }
+    };
+    loadProfile();
+  }, []);
+
+  const assignedTrainerName = memberProfile?.personalTrainer?.name || memberProfile?.assignedTrainer?.name || 'Coach Vicky';
 
   const exercises = [
     { id: 1, name: 'Barbell Back Squat', sets: 4, reps: '6-8', rest: '180s', video: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800' },
@@ -26,9 +42,9 @@ export const MemberWorkouts = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-extrabold text-white font-display uppercase">PRESCRIBED DAILY WORKOUT</h1>
-            <p className="text-xs text-gray-400">Titan Hypertrophy — Block 2 (Coach Marcus Vance)</p>
+            <p className="text-xs text-gray-400">Titan Hypertrophy — Block 2 (<strong className="text-amber-400">Coach {assignedTrainerName}</strong>)</p>
           </div>
-          <Badge variant="crimson">Week 4 / Day 1</Badge>
+          <Badge variant="amber">Week 4 / Day 1</Badge>
         </div>
 
         <div className="space-y-4">

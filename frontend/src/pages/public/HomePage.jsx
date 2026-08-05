@@ -27,7 +27,12 @@ export const HomePage = () => {
       try {
         const data = await api.getTrainers();
         if (Array.isArray(data) && data.length > 0) {
-          setTrainers(data.slice(0, 3));
+          let combined = [...data];
+          if (combined.length < 3) {
+            const extra = MOCK_TRAINERS.filter(m => !combined.some(t => t.name === m.name));
+            combined = [...combined, ...extra];
+          }
+          setTrainers(combined.slice(0, 3));
         } else {
           setTrainers(MOCK_TRAINERS.slice(0, 3));
         }
@@ -94,6 +99,18 @@ export const HomePage = () => {
 
         {/* Centered Cutout Male & Female Athletes Photo - Strictly In Foreground (z-20) */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 w-full max-w-3xl h-[68vh] md:h-[82vh] flex items-end justify-center pointer-events-none">
+          {/* Foreground Swirling Smoke Puff Veil */}
+          <motion.div
+            animate={{
+              x: [-30, 30, -30],
+              y: [10, -20, 10],
+              opacity: [0.35, 0.65, 0.35],
+              scale: [0.95, 1.1, 0.95]
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute bottom-10 w-full h-[400px] bg-gradient-to-t from-white/[0.12] via-gray-200/[0.06] to-transparent blur-[75px] pointer-events-none z-15"
+          />
+
           <motion.img
             initial={{ opacity: 0, scale: 0.88, y: 80 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

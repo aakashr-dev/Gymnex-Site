@@ -32,7 +32,7 @@ export const ProgramsPage = () => {
     fetchLivePrograms();
   }, []);
 
-  const categories = ['All', 'Muscle & Mass Building', 'Fat Loss & Shredding', 'Strength & Powerlifting', 'Functional & Calisthenics'];
+  const categories = ['All', 'Muscle & Mass Building', 'Strength & Powerlifting', 'Fat Loss & Shredding', 'Transformation & Body Sculpting', 'Functional & Calisthenics', 'Recovery & Mobility'];
 
   const rawFiltered = selectedCategory === 'All'
     ? programs
@@ -136,7 +136,7 @@ export const ProgramsPage = () => {
                         <div className="space-y-2 text-xs text-gray-300 pt-2 border-t border-white/10">
                           <div className="flex items-center justify-between">
                             <span className="text-gray-500 font-semibold uppercase">Instructor:</span>
-                            <span className="font-bold text-white">{program.instructor || 'Master Staff'}</span>
+                            <span className="font-bold text-amber-400">{program.instructor || program.trainerName || 'Master Staff'}</span>
                           </div>
                           <div className="flex items-center justify-between">
                             <span className="text-gray-500 font-semibold uppercase">Duration:</span>

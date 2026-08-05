@@ -23,8 +23,8 @@ export const MembershipPage = () => {
   }, []);
 
   const handleSubscribe = (plan) => {
-    toast.success(`Selected ${plan.name}! Proceeding to enrollment...`);
-    navigate('/auth');
+    toast.success(`Selected ${plan.name}! Directing to Enrollment Contact Portal...`);
+    navigate(`/contact?plan=${encodeURIComponent(plan.name)}`);
   };
 
   return (

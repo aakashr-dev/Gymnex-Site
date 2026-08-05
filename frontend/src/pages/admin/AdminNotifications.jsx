@@ -19,6 +19,8 @@ export const AdminNotifications = () => {
       const data = await api.getNotifications();
       if (Array.isArray(data) && data.length > 0) {
         setNotifications(data);
+      } else if (Array.isArray(data)) {
+        setNotifications(data);
       } else {
         setNotifications(MOCK_NOTIFICATIONS);
       }

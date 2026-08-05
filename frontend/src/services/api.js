@@ -122,6 +122,20 @@ export const api = {
     }
   },
 
+  async getMyMemberProfile() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/members/me`, {
+        headers: getAuthHeaders()
+      });
+      const data = await res.json();
+      if (data.success && data.data) return data.data;
+      return null;
+    } catch (err) {
+      console.warn('Fetch my member profile failed:', err.message);
+      return null;
+    }
+  },
+
   async createMember(memberData) {
     try {
       const res = await fetch(`${API_BASE_URL}/members`, {

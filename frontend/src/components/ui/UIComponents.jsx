@@ -3,43 +3,75 @@ import { motion } from 'framer-motion';
 import { CountUpNumber, MagneticButton } from '../motion/MotionComponents';
 import { Search, X, ChevronRight, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
 
-/* Atmospheric Drifting Smoke Background Layer with 3-tier billows & golden spotlight glow */
+/* Atmospheric Drifting Smoke Background Layer with multi-tier smoke billows & golden spotlight glow */
 export const AtmosphericBackground = ({ className = '' }) => (
   <div className={`absolute inset-0 pointer-events-none overflow-hidden z-0 ${className}`}>
     {/* Core Golden Ambient Glow behind athlete */}
     <motion.div
       animate={{
-        scale: [1, 1.12, 1.02, 1],
-        opacity: [0.35, 0.55, 0.4, 0.35]
+        scale: [1, 1.15, 1.03, 1],
+        opacity: [0.35, 0.6, 0.45, 0.35]
       }}
-      transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[900px] md:w-[1200px] h-[500px] md:h-[700px] bg-amber-500/15 blur-[170px] rounded-full pointer-events-none"
+      transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+      className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[900px] md:w-[1300px] h-[500px] md:h-[750px] bg-amber-500/15 blur-[180px] rounded-full pointer-events-none"
     />
 
-    {/* Flank Left Heavy Smoke Cloud */}
+    {/* Flank Left Massive Billowing Smoke Cloud */}
     <motion.div
       animate={{
-        x: [-30, 40, -30],
-        y: [0, -25, 0],
-        opacity: [0.3, 0.55, 0.3]
+        x: [-40, 50, -40],
+        y: [0, -35, 0],
+        scale: [1, 1.1, 1],
+        opacity: [0.4, 0.7, 0.4]
+      }}
+      transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+      className="absolute -bottom-10 -left-44 w-[900px] h-[750px] bg-gradient-to-tr from-white/[0.14] via-gray-300/[0.08] to-transparent blur-[110px] rounded-full pointer-events-none"
+    />
+
+    {/* Flank Right Massive Billowing Smoke Cloud */}
+    <motion.div
+      animate={{
+        x: [50, -40, 50],
+        y: [-20, 25, -20],
+        scale: [1, 1.12, 1],
+        opacity: [0.35, 0.65, 0.35]
       }}
       transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute -bottom-20 -left-40 w-[800px] h-[650px] bg-white/[0.07] blur-[140px] rounded-full pointer-events-none"
+      className="absolute -bottom-10 -right-44 w-[950px] h-[750px] bg-gradient-to-tl from-white/[0.13] via-gray-300/[0.07] to-transparent blur-[120px] rounded-full pointer-events-none"
     />
 
-    {/* Flank Right Heavy Smoke Cloud */}
+    {/* Swirling Center Fog Core Behind Athlete */}
     <motion.div
       animate={{
-        x: [40, -30, 40],
-        y: [-15, 20, -15],
-        opacity: [0.25, 0.5, 0.25]
+        scale: [0.95, 1.15, 0.95],
+        opacity: [0.45, 0.75, 0.45],
+        rotate: [0, 8, -5, 0]
       }}
-      transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute -bottom-20 -right-40 w-[850px] h-[650px] bg-white/[0.06] blur-[150px] rounded-full pointer-events-none"
+      transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+      className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] md:w-[950px] h-[550px] bg-white/[0.09] blur-[95px] rounded-full pointer-events-none"
     />
 
-    {/* Center Top Subtle Lighting Veil */}
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-gradient-to-b from-black via-black/40 to-transparent pointer-events-none z-10" />
+    {/* Floating Micro Smoke Billow 1 (Top Left) */}
+    <motion.div
+      animate={{
+        x: [-20, 30, -20],
+        y: [-30, 20, -30],
+        opacity: [0.2, 0.5, 0.2]
+      }}
+      transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+      className="absolute top-12 left-[10%] w-[500px] h-[400px] bg-white/[0.06] blur-[80px] rounded-full pointer-events-none"
+    />
+
+    {/* Floating Micro Smoke Billow 2 (Top Right) */}
+    <motion.div
+      animate={{
+        x: [30, -20, 30],
+        y: [20, -30, 20],
+        opacity: [0.2, 0.5, 0.2]
+      }}
+      transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+      className="absolute top-12 right-[10%] w-[550px] h-[420px] bg-white/[0.06] blur-[85px] rounded-full pointer-events-none"
+    />
 
     {/* Bottom Vignette & Fade to Black Gradient */}
     <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-dark-base via-dark-base/90 to-transparent z-10 pointer-events-none" />
