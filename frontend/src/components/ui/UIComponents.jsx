@@ -245,18 +245,19 @@ export const Button = ({
   );
 };
 
-export const Card = ({ children, className = '', hoverGlow = true, onClick }) => (
+export const Card = React.memo(({ children, className = '', hoverGlow = true, onClick }) => (
   <div
     onClick={onClick}
-    className={`bg-dark-card border border-white/10 rounded-2xl p-6 md:p-8 transition-all duration-400 relative overflow-hidden ${
+    className={`bg-dark-card border border-white/10 rounded-2xl p-6 md:p-8 transition-[transform,border-color,box-shadow,background-color] duration-300 ease-out relative overflow-hidden gpu-accelerated ${
       hoverGlow ? 'hover:border-amber-500/40 hover:shadow-crimson-glow hover:-translate-y-1.5' : ''
     } ${onClick ? 'cursor-pointer' : ''} ${className}`}
   >
     {children}
   </div>
-);
+));
+Card.displayName = 'Card';
 
-export const Badge = ({ children, variant = 'amber', className = '' }) => {
+export const Badge = React.memo(({ children, variant = 'amber', className = '' }) => {
   const variants = {
     amber: 'bg-amber-500/10 text-amber-500 border border-amber-500/30',
     crimson: 'bg-amber-500/10 text-amber-500 border border-amber-500/30',
@@ -270,9 +271,10 @@ export const Badge = ({ children, variant = 'amber', className = '' }) => {
       {children}
     </span>
   );
-};
+});
+Badge.displayName = 'Badge';
 
-export const StatCard = ({ title, value, prefix = '', suffix = '', trend, icon: Icon, description }) => (
+export const StatCard = React.memo(({ title, value, prefix = '', suffix = '', trend, icon: Icon, description }) => (
   <Card className="flex flex-col justify-between">
     <div className="flex items-center justify-between mb-4">
       <span className="text-xs font-black tracking-widest text-gray-400 uppercase font-sans">{title}</span>
@@ -295,18 +297,20 @@ export const StatCard = ({ title, value, prefix = '', suffix = '', trend, icon: 
       {description && <p className="text-xs text-gray-400 mt-1.5 font-sans">{description}</p>}
     </div>
   </Card>
-);
+));
+StatCard.displayName = 'StatCard';
 
 export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-xl' }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md transition-opacity">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        initial={{ opacity: 0, scale: 0.96, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className={`bg-dark-surface border border-white/10 rounded-3xl w-full ${maxWidth} overflow-hidden shadow-2xl relative`}
+        exit={{ opacity: 0, scale: 0.96, y: 12 }}
+        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+        className={`bg-dark-surface border border-white/10 rounded-3xl w-full ${maxWidth} overflow-hidden shadow-2xl relative gpu-accelerated`}
       >
         <div className="flex items-center justify-between px-7 py-5 border-b border-white/10">
           <h3 className="text-xl font-black text-white uppercase tracking-wider font-display">{title}</h3>
