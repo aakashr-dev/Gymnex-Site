@@ -75,7 +75,9 @@ export const BranchHero = ({ onExploreClick, onBookTourClick }) => {
             <img
               src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1200"
               alt="GYMNEX Flagship Interior"
-              className="w-full h-[450px] sm:h-[520px] object-cover group-hover:scale-105 transition-transform duration-700"
+              loading="eager"
+              decoding="async"
+              className="w-full h-[450px] sm:h-[520px] object-cover group-hover:scale-105 transition-transform duration-700 gpu-accelerated"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-dark-base via-transparent to-black/30" />
 

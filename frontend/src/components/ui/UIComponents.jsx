@@ -4,19 +4,55 @@ import { CountUpNumber, MagneticButton } from '../motion/MotionComponents';
 import { Search, X, ChevronRight, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
 
 /* Atmospheric Drifting Smoke Background Layer with multi-tiered turbulent wisps, screen blend & golden spotlight glow */
-export const AtmosphericBackground = ({ className = '' }) => {
+export const AtmosphericBackground = React.memo(({ className = '' }) => {
   const videoRef = React.useRef(null);
+  const containerRef = React.useRef(null);
 
   React.useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch((err) => {
-        console.warn('Smoke video autoplay prevented:', err);
-      });
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Try auto playing
+    video.play().catch((err) => {
+      console.warn('Smoke video autoplay prevented:', err);
+    });
+
+    // Pause video playback when off-screen or tab hidden for GPU/CPU optimization
+    let observer;
+    if ('IntersectionObserver' in window && containerRef.current) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              video.play().catch(() => {});
+            } else {
+              video.pause();
+            }
+          });
+        },
+        { threshold: 0.05 }
+      );
+      observer.observe(containerRef.current);
     }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        video.pause();
+      } else if (containerRef.current) {
+        video.play().catch(() => {});
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      if (observer) observer.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   return (
-    <div className={`absolute inset-0 pointer-events-none overflow-hidden z-0 select-none ${className}`}>
+    <div ref={containerRef} className={`absolute inset-0 pointer-events-none overflow-hidden z-0 select-none ${className}`}>
       {/* Native HTML5 Autoplay Looping Background Smoke Video with High Visibility */}
       <video
         ref={videoRef}
@@ -24,13 +60,12 @@ export const AtmosphericBackground = ({ className = '' }) => {
         loop
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         style={{
-          filter: 'brightness(0.6) contrast(1.3) saturate(0.9)',
           mixBlendMode: 'screen',
           opacity: 0.85
         }}
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 gpu-accelerated will-change-transform"
       >
         <source src="/videos/smoke.mp4" type="video/mp4" />
         <source src="/hero-video.mp4" type="video/mp4" />
@@ -48,28 +83,22 @@ export const AtmosphericBackground = ({ className = '' }) => {
       />
 
       {/* Core Golden Ambient Spotlight Glow behind subject */}
-      <motion.div
-        animate={{ scale: [1, 1.12, 1.02, 1], opacity: [0.35, 0.55, 0.4, 0.35] }}
-        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[900px] md:w-[1200px] h-[500px] md:h-[700px] bg-amber-500/15 blur-[170px] rounded-full pointer-events-none z-0"
-      />
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[900px] md:w-[1200px] h-[500px] md:h-[700px] bg-amber-500/15 blur-[170px] rounded-full pointer-events-none z-0 animate-glow gpu-accelerated" />
 
-      {/* Framer Motion Wisps for Additional Atmospheric Parallax Depth */}
-      <motion.div
-        animate={{ x: [-40, 60, -20, -40], y: [0, -35, 10, 0], opacity: [0.25, 0.45, 0.3, 0.25], scale: [1, 1.08, 0.98, 1] }}
-        transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+      {/* CSS-accelerated Wisps for Additional Atmospheric Parallax Depth */}
+      <div
         style={{ borderRadius: '42% 58% 65% 35% / 45% 40% 60% 55%', mixBlendMode: 'screen' }}
-        className="absolute -bottom-24 -left-48 w-[750px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0"
+        className="absolute -bottom-24 -left-48 w-[750px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0 animate-smoke-left gpu-accelerated"
       />
-      <motion.div
-        animate={{ x: [40, -60, 20, 40], y: [-15, 25, -5, -15], opacity: [0.22, 0.42, 0.28, 0.22], scale: [1, 1.1, 0.97, 1] }}
-        transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+      <div
         style={{ borderRadius: '55% 45% 40% 60% / 50% 55% 45% 50%', mixBlendMode: 'screen' }}
-        className="absolute -bottom-24 -right-48 w-[780px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0"
+        className="absolute -bottom-24 -right-48 w-[780px] h-[600px] bg-white/15 blur-3xl pointer-events-none z-0 animate-smoke-right gpu-accelerated"
       />
     </div>
   );
-};
+});
+AtmosphericBackground.displayName = 'AtmosphericBackground';
+
 
 /* Layered Oversized Text-Behind-Subject Helper - Rugged Editorial Headline Typography */
 export const LayeredHeroText = ({ line1, line2, delay = 0, className = '', trigger = true }) => (

@@ -3,10 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Target, Eye } from 'lucide-react';
 
 export const IntroLoader = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
+  const isAlreadyShown = typeof window !== 'undefined' && sessionStorage.getItem('gymnex_intro_shown') === 'true';
+  const [isLoading, setIsLoading] = useState(!isAlreadyShown);
+  const [progress, setProgress] = useState(isAlreadyShown ? 100 : 0);
 
   useEffect(() => {
+    if (isAlreadyShown) {
+      window.__introDone = true;
+      window.dispatchEvent(new Event('introComplete'));
+      return;
+    }
+
     // 1.8 seconds smooth intro sequence
     const duration = 1800;
     const steps = 100;
@@ -22,33 +29,35 @@ export const IntroLoader = () => {
         clearInterval(timer);
         setTimeout(() => {
           setIsLoading(false);
+          sessionStorage.setItem('gymnex_intro_shown', 'true');
           window.__introDone = true;
           window.dispatchEvent(new Event('introComplete'));
-        }, 200);
+        }, 150);
       }
     }, stepTime * 2);
 
     // Fail-safe safety backup to guarantee intro loader always unmounts cleanly
     const safetyTimer = setTimeout(() => {
       setIsLoading(false);
+      sessionStorage.setItem('gymnex_intro_shown', 'true');
       window.__introDone = true;
       window.dispatchEvent(new Event('introComplete'));
-    }, 2400);
+    }, 2200);
 
     return () => {
       clearInterval(timer);
       clearTimeout(safetyTimer);
     };
-  }, []);
+  }, [isAlreadyShown]);
 
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[9999] bg-dark-base flex flex-col items-center justify-center select-none overflow-hidden"
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed inset-0 z-[9999] bg-dark-base flex flex-col items-center justify-center select-none overflow-hidden gpu-accelerated"
         >
           {/* Ambient Warm Golden Spotlight */}
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-amber-500/20 blur-[160px] pointer-events-none animate-pulse" />

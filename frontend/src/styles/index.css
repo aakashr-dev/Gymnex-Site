@@ -152,12 +152,46 @@
 
 .animate-smoke-left {
   animation: smokeDriftLeft 18s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .animate-smoke-right {
   animation: smokeDriftRight 22s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .animate-glow {
   animation: atmosphericGlow 8s ease-in-out infinite;
+  will-change: transform, opacity;
 }
+
+/* GPU Hardware Acceleration Utilities */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-smoke-left,
+  .animate-smoke-right,
+  .animate-glow {
+    animation: none !important;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

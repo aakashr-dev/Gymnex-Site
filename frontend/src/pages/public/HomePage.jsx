@@ -97,7 +97,6 @@ export const HomePage = () => {
           </motion.h1>
         </div>
 
-        {/* Centered Cutout Male & Female Athletes Photo - Strictly In Foreground (z-20) */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 w-full max-w-3xl h-[68vh] md:h-[82vh] flex items-end justify-center pointer-events-none">
           <motion.img
             initial={{ opacity: 0, scale: 0.88, y: 80 }}
@@ -105,7 +104,9 @@ export const HomePage = () => {
             transition={{ duration: 1.2, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             src="/hero-athletes.png"
             alt="GYMNEX Master Athletes"
-            className="h-full w-auto object-cover object-top filter contrast-105 drop-shadow-[0_20px_50px_rgba(0,0,0,0.95)] relative z-20"
+            loading="eager"
+            decoding="async"
+            className="h-full w-auto object-cover object-top filter contrast-105 drop-shadow-[0_20px_50px_rgba(0,0,0,0.95)] relative z-20 gpu-accelerated"
           />
         </div>
 
@@ -173,6 +174,8 @@ export const HomePage = () => {
             <img
               src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1800"
               alt="GYMNEX 360 Virtual Tour"
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-90"
             />
             
