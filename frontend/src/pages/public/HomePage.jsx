@@ -51,7 +51,7 @@ export const HomePage = () => {
   return (
     <PageTransition>
       {/* 1. HERO SECTION - Reference Composition Benchmark */}
-      <section key={introDone ? 'hero-ready' : 'hero-init'} className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden bg-dark-base select-none">
+      <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden bg-dark-base select-none">
         {/* Animated Smoke/Fog Multi-Layer Atmosphere */}
         <AtmosphericBackground />
 

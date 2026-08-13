@@ -14,38 +14,39 @@ export const IntroLoader = () => {
       return;
     }
 
-    // 1.8 seconds smooth intro sequence
-    const duration = 1800;
-    const steps = 100;
-    const stepTime = duration / steps;
-    let currentStep = 0;
+    const duration = 1200; // 1.2s fast cinematic intro
+    let startTime = null;
+    let animId;
 
-    const timer = setInterval(() => {
-      currentStep += 2;
-      if (currentStep > 100) currentStep = 100;
-      setProgress(currentStep);
+    const updateProgress = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const pct = Math.min(Math.floor((elapsed / duration) * 100), 100);
+      setProgress(pct);
 
-      if (currentStep >= 100) {
-        clearInterval(timer);
+      if (pct < 100) {
+        animId = requestAnimationFrame(updateProgress);
+      } else {
         setTimeout(() => {
           setIsLoading(false);
           sessionStorage.setItem('gymnex_intro_shown', 'true');
           window.__introDone = true;
           window.dispatchEvent(new Event('introComplete'));
-        }, 150);
+        }, 100);
       }
-    }, stepTime * 2);
+    };
 
-    // Fail-safe safety backup to guarantee intro loader always unmounts cleanly
+    animId = requestAnimationFrame(updateProgress);
+
     const safetyTimer = setTimeout(() => {
       setIsLoading(false);
       sessionStorage.setItem('gymnex_intro_shown', 'true');
       window.__introDone = true;
       window.dispatchEvent(new Event('introComplete'));
-    }, 2200);
+    }, 1600);
 
     return () => {
-      clearInterval(timer);
+      if (animId) cancelAnimationFrame(animId);
       clearTimeout(safetyTimer);
     };
   }, [isAlreadyShown]);
@@ -55,29 +56,25 @@ export const IntroLoader = () => {
       {isLoading && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
           className="fixed inset-0 z-[9999] bg-dark-base flex flex-col items-center justify-center select-none overflow-hidden gpu-accelerated"
         >
           {/* Ambient Warm Golden Spotlight */}
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-amber-500/20 blur-[160px] pointer-events-none animate-pulse" />
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-amber-500/20 blur-[160px] pointer-events-none animate-pulse gpu-accelerated" />
 
-          {/* Full Screen Cinematic Athlete Image with Smooth Camera Zoom to Face/Eyes */}
+          {/* Full Screen Cinematic Athlete Image */}
           <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
             <motion.img
-              initial={{ scale: 1, y: 20 }}
-              animate={{
-                scale: [1, 1.25, 2.4],
-                y: [20, 0, -80]
-              }}
-              transition={{
-                duration: 2.6,
-                ease: [0.25, 0.1, 0.25, 1]
-              }}
+              initial={{ scale: 1, y: 10 }}
+              animate={{ scale: 1.08, y: 0 }}
+              transition={{ duration: 1.4, ease: 'easeOut' }}
               style={{ transformOrigin: '50% 25%' }}
               src="/intro-athlete.jpg"
               alt="GYMNEX Cinematic Intro Athlete"
-              className="h-full w-auto object-cover filter contrast-125 brightness-90 shadow-2xl"
+              loading="eager"
+              decoding="async"
+              className="h-full w-auto object-cover opacity-90 shadow-2xl gpu-accelerated"
             />
             
             {/* Dark Vignette Overlay */}
@@ -86,22 +83,21 @@ export const IntroLoader = () => {
 
           {/* Foreground Telemetry Content */}
           <div className="relative z-20 flex flex-col items-center text-center space-y-6 max-w-lg px-4 mt-auto mb-16">
-            
             {/* Pulsing Target Icon */}
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.4 }}
-              className="w-14 h-14 rounded-full bg-black/80 border border-amber-500/50 flex items-center justify-center shadow-crimson-glow backdrop-blur-md"
+              transition={{ duration: 0.3 }}
+              className="w-14 h-14 rounded-full bg-black/80 border border-amber-500/50 flex items-center justify-center shadow-crimson-glow"
             >
-              <Target className="w-8 h-8 text-amber-500 stroke-[2.5] animate-pulse" />
+              <Target className="w-8 h-8 text-amber-500 stroke-[2.5]" />
             </motion.div>
 
             {/* Cinematic Headline */}
             <motion.div
-              initial={{ y: 15, opacity: 0 }}
+              initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.4, delay: 0.05 }}
               className="space-y-1"
             >
               <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-widest text-white font-display">
@@ -114,17 +110,16 @@ export const IntroLoader = () => {
 
             {/* Progress Bar & Counter */}
             <div className="w-72 sm:w-80 space-y-2 pt-2">
-              <div className="h-2 w-full bg-black/90 border border-amber-500/40 rounded-full overflow-hidden relative shadow-2xl backdrop-blur-md">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-300 rounded-full shadow-crimson-glow"
+              <div className="h-2 w-full bg-black/90 border border-amber-500/40 rounded-full overflow-hidden relative shadow-2xl">
+                <div
+                  className="h-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-300 rounded-full shadow-crimson-glow transition-all duration-75"
                   style={{ width: `${progress}%` }}
-                  transition={{ ease: 'linear' }}
                 />
               </div>
 
               <div className="flex items-center justify-between text-xs font-black uppercase font-display text-gray-300">
                 <span className="flex items-center gap-1.5 text-[11px] text-amber-500 font-sans tracking-widest">
-                  <Eye className="w-3.5 h-3.5 animate-pulse" /> INITIALIZING TELEMETRY
+                  <Eye className="w-3.5 h-3.5" /> INITIALIZING TELEMETRY
                 </span>
                 <span className="text-amber-500 text-sm tracking-widest font-extrabold">
                   {progress}%

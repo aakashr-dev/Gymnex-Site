@@ -67,8 +67,8 @@ export const AtmosphericBackground = React.memo(({ className = '' }) => {
         }}
         className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 gpu-accelerated will-change-transform"
       >
-        <source src="/videos/smoke.mp4" type="video/mp4" />
         <source src="/hero-video.mp4" type="video/mp4" />
+        <source src="/videos/smoke.mp4" type="video/mp4" />
       </video>
 
       {/* Subtle Dark Overlay (40% Opacity) allowing smoke to remain clearly visible */}
